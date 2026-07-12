@@ -63,7 +63,12 @@
       background-image:linear-gradient(180deg, rgba(8,14,26,0.62) 0%, rgba(8,14,26,0.40) 38%, rgba(8,14,26,0.55) 75%, rgba(8,14,26,0.72) 100%), url('background.jpg');
       background-size:cover; background-position:center; background-attachment:fixed; background-repeat:no-repeat;
     }
-    #page-results  { transform:translateX(100%); opacity:0; pointer-events:none; }
+    #page-results  {
+      transform:translateX(100%); opacity:0; pointer-events:none;
+      /* BACKGROUND PHOTO — same photo as the landing page, replace background.jpg with your image */
+      background-image:linear-gradient(180deg, rgba(8,14,26,0.62) 0%, rgba(8,14,26,0.40) 38%, rgba(8,14,26,0.55) 75%, rgba(8,14,26,0.72) 100%), url('background.jpg');
+      background-size:cover; background-position:center; background-attachment:fixed; background-repeat:no-repeat;
+    }
     #page-landing.hidden  { transform:translateX(-100%); opacity:0; pointer-events:none; }
     #page-results.visible { transform:translateX(0);     opacity:1; pointer-events:all; }
 
@@ -221,7 +226,7 @@
 
     /* ── RESULTS PAGE ── */
     #page-results .page-inner { padding:0; align-items:stretch; }
-    .results-shell { width:100%; max-width:1040px; margin:0 auto; padding:26px 20px 70px; }
+    .results-shell { width:100%; max-width:1040px; margin:0 auto; padding:110px 20px 70px; }
 
     .results-topbar {
       display:flex; align-items:center; gap:16px; margin-bottom:22px; flex-wrap:wrap;
@@ -231,18 +236,18 @@
       padding:11px 18px; border-radius:9px;
       border:1px solid var(--border); background:var(--white);
       color:var(--muted); font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700;
-      cursor:pointer; transition:all 0.2s; flex-shrink:0; box-shadow:var(--shadow);
+      cursor:pointer; transition:all 0.2s; flex-shrink:0; box-shadow:0 14px 30px rgba(4,8,18,0.28);
     }
     .back-btn:hover { border-color:var(--blue); color:var(--blue); }
-    .results-title h2 { font-family:'Source Serif 4',serif; font-size:1.35rem; font-weight:600; color:var(--ink); line-height:1.2; }
-    .results-title span { font-family:'Space Mono',monospace; font-size:0.64rem; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; }
+    .results-title h2 { font-family:'Source Serif 4',serif; font-size:1.35rem; font-weight:600; color:#fff; line-height:1.2; text-shadow:0 1px 10px rgba(0,0,0,0.4); }
+    .results-title span { font-family:'Space Mono',monospace; font-size:0.64rem; letter-spacing:1.5px; color:#e2e8f7; text-transform:uppercase; text-shadow:0 1px 8px rgba(0,0,0,0.4); }
 
     .results-grid { display:grid; grid-template-columns:1.05fr 1fr; gap:22px; align-items:start; }
     @media (max-width:880px) { .results-grid { grid-template-columns:1fr; } }
 
     .card {
-      background:var(--white); border:1px solid var(--border);
-      border-radius:14px; box-shadow:var(--shadow); overflow:hidden;
+      background:var(--white); border:1px solid rgba(255,255,255,0.5);
+      border-radius:14px; box-shadow:0 24px 56px rgba(4,8,18,0.35); overflow:hidden;
     }
     .card-top { padding:24px 24px 0; }
     .card-body-inner { padding:0 24px 24px; }
@@ -392,7 +397,7 @@
       .card-top, .card-body-inner { padding-left:18px; padding-right:18px; }
       .site-header { padding:14px 16px; }
       .hero { min-height:64vh; padding:100px 16px 40px; }
-      #page-landing { background-attachment:scroll; }
+      #page-landing, #page-results { background-attachment:scroll; }
     }
   </style>
 </head>
@@ -428,7 +433,6 @@
       <!-- Hero with full-bleed background photo -->
       <div class="hero">
         <div class="hero-inner">
-          <div class="hero-eyebrow">Student Ranks &amp; Results Registry</div>
           <div class="hero-title">Check Your Results</div>
           <div class="hero-rule"></div>
         </div>
@@ -505,7 +509,7 @@
   ═══════════════════════════ -->
   <div id="page-results" class="page">
 
-    <div class="site-header">
+    <div class="site-header header-overlay">
       <div class="brand">
         <div class="crest-badge"><i class="fas fa-chart-line"></i></div>
         <div class="brand-text">
@@ -639,7 +643,7 @@
 
         </div>
 
-        <footer class="site-footer">&copy; Made by Omar Aboolo &middot; Class of 2030</footer>
+        <footer class="site-footer footer-on-photo">&copy; Made by Omar Aboolo &middot; Class of 2030</footer>
       </div>
     </div>
   </div>
