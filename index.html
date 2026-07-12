@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      /* Institutional palette — flat, light, blue/teal — like a real university portal */
+      /* Institutional palette */
       --blue:#2952d9; --blue-dark:#1c3aa8; --blue-soft:#eaf0ff;
       --teal:#0e9c86; --teal-dark:#0b7d6b; --teal-soft:#e6f7f3;
       --ink:#182238; --muted:#6b7688; --faint:#9aa3b2;
@@ -17,7 +17,7 @@
       --shadow:0 10px 28px rgba(24,34,56,0.07);
       --shadow-lg:0 20px 48px rgba(24,34,56,0.12);
 
-      /* Grade tones — flat, matte, matching dashboard reference */
+      /* Grade tones */
       --em:#0e9c86; --em-lt:#3fbfa8;
       --sap:#2952d9; --sap-lt:#5b7de8;
       --amb:#c9861a; --amb-lt:#e0a53f;
@@ -53,26 +53,24 @@
       z-index:1;
       background:var(--bg);
       transition:transform 0.55s cubic-bezier(0.77,0,0.18,1),
-                 opacity   0.55s cubic-bezier(0.77,0,0.18,1);
+                  opacity   0.55s cubic-bezier(0.77,0,0.18,1);
       will-change:transform;
     }
 
     #page-landing {
       transform:translateX(0); opacity:1;
-      /* BACKGROUND PHOTO — replace background.jpg with your image. Covers the entire landing page, including the selection card area below the title. */
       background-image:linear-gradient(180deg, rgba(8,14,26,0.62) 0%, rgba(8,14,26,0.40) 38%, rgba(8,14,26,0.55) 75%, rgba(8,14,26,0.72) 100%), url('background.jpg');
       background-size:cover; background-position:center; background-attachment:fixed; background-repeat:no-repeat;
     }
     #page-results  {
       transform:translateX(100%); opacity:0; pointer-events:none;
-      /* BACKGROUND PHOTO — same photo as the landing page, replace background.jpg with your image */
       background-image:linear-gradient(180deg, rgba(8,14,26,0.62) 0%, rgba(8,14,26,0.40) 38%, rgba(8,14,26,0.55) 75%, rgba(8,14,26,0.72) 100%), url('background.jpg');
       background-size:cover; background-position:center; background-attachment:fixed; background-repeat:no-repeat;
     }
     #page-landing.hidden  { transform:translateX(-100%); opacity:0; pointer-events:none; }
     #page-results.visible { transform:translateX(0);     opacity:1; pointer-events:all; }
 
-    /* ── TOP HEADER (both pages) ── */
+    /* ── TOP HEADER ── */
     .site-header {
       display:flex; align-items:center; justify-content:space-between;
       gap:16px; padding:16px 28px;
@@ -104,7 +102,7 @@
     .contact-chip:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-soft); }
     .contact-chip i { color:var(--blue); font-size:0.82rem; }
 
-    /* Transparent header floating over the full-bleed hero photo (landing page only) */
+    /* Transparent header */
     .site-header.header-overlay {
       position:absolute; top:0; left:0; width:100%;
       background:transparent; border-bottom:none; z-index:10;
@@ -129,7 +127,7 @@
       gap:0;
     }
 
-    /* ── HERO (title zone) — sits on the page-wide photo, no background of its own ── */
+    /* ── HERO ── */
     .hero {
       width:100%; position:relative;
       min-height:78vh;
@@ -158,7 +156,7 @@
     }
     @keyframes bounce { 0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,8px);} }
 
-    /* ── SELECTION AREA — sits directly on the photo, so text/card are styled for contrast ── */
+    /* ── SELECTION AREA ── */
     .select-wrap {
       width:100%; max-width:640px; margin:0 auto;
       padding:10px 20px 90px;
@@ -433,6 +431,7 @@
       <!-- Hero with full-bleed background photo -->
       <div class="hero">
         <div class="hero-inner">
+          <div class="hero-eyebrow">Student Ranks &amp; Results Registry</div>
           <div class="hero-title">Check Your Results</div>
           <div class="hero-rule"></div>
         </div>
@@ -477,23 +476,6 @@
                 </button>
               </div>
             </div>
-
-            <!--
-              TO ADD A NEW SECTION, copy the block below and customize:
-
-              <div>
-                <button class="nav-btn" onclick="goToResults('KEY')">
-                  <span class="nav-icon icon-purple"><i class="fas fa-ICON"></i></span>
-                  <span class="nav-text">
-                    Title
-                    <small>SUBTITLE</small>
-                  </span>
-                  <i class="fas fa-chevron-right nav-arrow arrow-right"></i>
-                </button>
-              </div>
-
-              Then add the KEY to MODE_META in the script below.
-            -->
 
           </div>
         </div>
@@ -591,55 +573,99 @@
             </div>
           </div>
 
-          <!-- RIGHT: class-wide stats -->
-          <div class="card stats-panel" id="stats-panel">
-            <div class="stats-card">
-              <div class="stats-section-label"><i class="fas fa-bolt"></i> Key Numbers</div>
-              <div class="key-stats">
-                <div class="key-stat-box">
-                  <div class="key-stat-val" id="stat-max">—</div>
-                  <div class="key-stat-lbl">Highest<br>Score</div>
+          <!-- RIGHT COLUMN WRAPPER -->
+          <div style="display:flex; flex-direction:column; gap:22px;">
+            
+            <!-- RIGHT: class-wide stats -->
+            <div class="card stats-panel" id="stats-panel">
+              <div class="stats-card">
+                <div class="stats-section-label"><i class="fas fa-bolt"></i> Key Numbers</div>
+                <div class="key-stats">
+                  <div class="key-stat-box">
+                    <div class="key-stat-val" id="stat-max">—</div>
+                    <div class="key-stat-lbl">Highest<br>Score</div>
+                  </div>
+                  <div class="key-stat-box">
+                    <div class="key-stat-val" id="stat-top100">—</div>
+                    <div class="key-stat-lbl">Top 100<br>Cutoff</div>
+                  </div>
+                  <div class="key-stat-box">
+                    <div class="key-stat-val" id="stat-top200">—</div>
+                    <div class="key-stat-lbl">Top 200<br>Cutoff</div>
+                  </div>
                 </div>
-                <div class="key-stat-box">
-                  <div class="key-stat-val" id="stat-top100">—</div>
-                  <div class="key-stat-lbl">Top 100<br>Cutoff</div>
+                <div class="stats-section-label"><i class="fas fa-chart-bar"></i> Grade Distribution</div>
+                <div class="dist-chart">
+                  <div class="dist-row">
+                    <span class="dist-label">Excellent</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-excellent" id="bar-excellent"></div></div>
+                    <span class="dist-count" id="cnt-excellent">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">Very Good</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-verygood" id="bar-verygood"></div></div>
+                    <span class="dist-count" id="cnt-verygood">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">Good</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-good" id="bar-good"></div></div>
+                    <span class="dist-count" id="cnt-good">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">Poor</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-poor" id="bar-poor"></div></div>
+                    <span class="dist-count" id="cnt-poor">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">Fail</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-fail" id="bar-fail"></div></div>
+                    <span class="dist-count" id="cnt-fail">0</span>
+                  </div>
                 </div>
-                <div class="key-stat-box">
-                  <div class="key-stat-val" id="stat-top200">—</div>
-                  <div class="key-stat-lbl">Top 200<br>Cutoff</div>
-                </div>
+                <div class="stats-note" id="stats-total-note">Search first to load statistics</div>
               </div>
-              <div class="stats-section-label"><i class="fas fa-chart-bar"></i> Grade Distribution</div>
-              <div class="dist-chart">
-                <div class="dist-row">
-                  <span class="dist-label">Excellent</span>
-                  <div class="dist-bar-wrap"><div class="dist-bar bar-excellent" id="bar-excellent"></div></div>
-                  <span class="dist-count" id="cnt-excellent">0</span>
-                </div>
-                <div class="dist-row">
-                  <span class="dist-label">Very Good</span>
-                  <div class="dist-bar-wrap"><div class="dist-bar bar-verygood" id="bar-verygood"></div></div>
-                  <span class="dist-count" id="cnt-verygood">0</span>
-                </div>
-                <div class="dist-row">
-                  <span class="dist-label">Good</span>
-                  <div class="dist-bar-wrap"><div class="dist-bar bar-good" id="bar-good"></div></div>
-                  <span class="dist-count" id="cnt-good">0</span>
-                </div>
-                <div class="dist-row">
-                  <span class="dist-label">Poor</span>
-                  <div class="dist-bar-wrap"><div class="dist-bar bar-poor" id="bar-poor"></div></div>
-                  <span class="dist-count" id="cnt-poor">0</span>
-                </div>
-                <div class="dist-row">
-                  <span class="dist-label">Fail</span>
-                  <div class="dist-bar-wrap"><div class="dist-bar bar-fail" id="bar-fail"></div></div>
-                  <span class="dist-count" id="cnt-fail">0</span>
-                </div>
-              </div>
-              <div class="stats-note" id="stats-total-note">Search first to load statistics</div>
             </div>
-          </div>
+
+            <!-- NEW: Rank Gap Calculator -->
+            <div class="card">
+              <div class="card-top">
+                <div class="section-label">
+                  <i class="fas fa-bullseye"></i>
+                  <span>Target Rank Calculator</span>
+                </div>
+                <div class="input-wrap">
+                  <i class="fas fa-hashtag"></i>
+                  <input class="seat-input" id="calc-seat-input" type="text" placeholder="Your Seat Number" />
+                </div>
+                <div class="input-wrap">
+                  <i class="fas fa-trophy"></i>
+                  <input class="seat-input" id="calc-rank-input" type="number" placeholder="Desired Rank (e.g., 50)" />
+                </div>
+              </div>
+              <div class="card-body-inner">
+                <button class="btn-search" id="calc-btn" onclick="doCalculate()" style="background:var(--teal); box-shadow:0 10px 22px rgba(14,156,134,0.25);">
+                  <i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap
+                </button>
+                <div class="loader" id="calc-loader" style="border-top-color:var(--teal);"></div>
+                <div class="error-msg" id="calc-error-msg"></div>
+                
+                <div class="result-area" id="calc-result-area" style="display:none;">
+                  <div class="divider"></div>
+                  <div class="stats-grid">
+                    <div class="stat-row">
+                      <span class="stat-label"><i class="fas fa-star" style="color:var(--teal);"></i> Target Grade Score</span>
+                      <span class="stat-val" id="calc-target-score">—</span>
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-label"><i class="fas fa-arrow-trend-up" style="color:var(--teal);"></i> Points Needed</span>
+                      <span class="stat-val" id="calc-points-needed" style="color:var(--teal); font-weight:800; font-size:1.1rem;">—</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div> <!-- /RIGHT COLUMN WRAPPER -->
 
         </div>
 
@@ -665,11 +691,9 @@
 
   /* ════════════════════════════════════
      PAGE METADATA
-     To add a new page: add a new key here
-     matching the key in APIS above.
   ════════════════════════════════════ */
   const MODE_META = {
-    y1:    { heading:"1st Year Results",     sub:"CLASS OF 2030 · RANK",          label:"1st Year · Class of 2030",      icon:"fa-medal"          },
+    y1:    { heading:"1st Year Results",     sub:"CLASS OF 2030 · RANK",          label:"1st Year · Class of 2030",      icon:"fa-medal"         },
     accum: { heading:"Accumulative Results", sub:"2ND YEAR · CLASS OF 2029",      label:"2nd Year · Accumulative Grade", icon:"fa-chart-line"     },
     y2nd:  { heading:"2nd Year Results",     sub:"2ND YEAR ONLY · CLASS OF 2029", label:"2nd Year · Year Grade",         icon:"fa-calendar-check" },
   };
@@ -696,6 +720,13 @@
 
     resetResult();
     document.getElementById('seat-input').value = '';
+    
+    // Clear calculator
+    document.getElementById('calc-seat-input').value = '';
+    document.getElementById('calc-rank-input').value = '';
+    document.getElementById('calc-result-area').style.display = 'none';
+    document.getElementById('calc-error-msg').style.display = 'none';
+
     // Fetch stats for this section (cached after first load)
     fetchStats(mode);
 
@@ -788,10 +819,10 @@
                    (data.evaluation && (data.evaluation.includes('راسب') || data.evaluation === 'Fail'));
     const grade = isFail ? { label:'Fail', cls:'bg-Fail' } : calcGrade(data.percent);
 
-    document.getElementById('res-name').innerText    = data.name    || '—';
+    document.getElementById('res-name').innerText    = data.name   || '—';
     document.getElementById('res-seat').innerText    = 'Seat: ' + (data.seat || '—');
     document.getElementById('res-rank').innerText    = '#' + (data.rank || '—');
-    document.getElementById('res-total').innerText   = data.total   || '—';
+    document.getElementById('res-total').innerText   = data.total  || '—';
     document.getElementById('res-percent').innerText = data.percent || '—';
     document.getElementById('grade-label').innerText = grade.label;
 
@@ -806,8 +837,6 @@
       renderStats(data.stats);
     }
   }
-
-
 
   /* ── Stats panel — auto-loads on section open via separate API ── */
   let cachedStats = {};   // keyed by mode so switching back is instant
@@ -886,6 +915,85 @@ function fetchStats(mode) {
   document.getElementById('seat-input').addEventListener('keypress', e => {
     if (e.key === 'Enter') doSearch();
   });
+
+  /* ── Target Rank Calculator ── */
+  function doCalculate() {
+    const seat = (document.getElementById('calc-seat-input').value || '').trim();
+    const targetRank = (document.getElementById('calc-rank-input').value || '').trim();
+    const btn = document.getElementById('calc-btn');
+    const errBox = document.getElementById('calc-error-msg');
+    const resBox = document.getElementById('calc-result-area');
+    const loader = document.getElementById('calc-loader');
+    
+    errBox.style.display = 'none';
+    resBox.style.display = 'none';
+
+    if (!seat || !targetRank) {
+      errBox.innerText = "Please enter both Seat Number and Target Rank.";
+      errBox.style.display = 'block';
+      return;
+    }
+
+    const url = APIS[currentMode];
+    if (!url) {
+      alert('Please configure API URL first.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="margin-right:8px;"></i>Calculating...';
+    loader.style.display = 'block';
+
+    fetch(url + '?seat=' + encodeURIComponent(seat) + '&targetRank=' + encodeURIComponent(targetRank))
+      .then(r => r.json())
+      .then(data => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap';
+        loader.style.display = 'none';
+
+        if (data.found) {
+          let targetDisplay = data.targetScore;
+          if (data.targetPercent) targetDisplay += ` (${data.targetPercent})`;
+          
+          document.getElementById('calc-target-score').innerText = targetDisplay;
+          
+          if (data.pointsNeeded > 0) {
+            document.getElementById('calc-points-needed').innerText = "+" + data.pointsNeeded;
+            document.getElementById('calc-points-needed').style.color = "var(--teal)";
+          } else {
+            document.getElementById('calc-points-needed').innerText = "Already reached!";
+            document.getElementById('calc-points-needed').style.color = "var(--ink)";
+          }
+          resBox.style.display = 'block';
+        } else {
+          errBox.innerText = data.error || "Could not find seat or target rank.";
+          errBox.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap';
+        loader.style.display = 'none';
+        errBox.innerText = 'Connection failed.';
+        errBox.style.display = 'block';
+      });
+  }
+
+  // Auto-fill calculator seat number when searching primary results
+  document.getElementById('search-btn').addEventListener('click', function() {
+      const mainSeat = document.getElementById('seat-input').value;
+      if(mainSeat) document.getElementById('calc-seat-input').value = mainSeat;
+  });
+
+  // Allow pressing Enter in the calculator inputs
+  document.getElementById('calc-seat-input').addEventListener('keypress', e => {
+    if (e.key === 'Enter') doCalculate();
+  });
+  document.getElementById('calc-rank-input').addEventListener('keypress', e => {
+    if (e.key === 'Enter') doCalculate();
+  });
+
 </script>
 
 </body>
