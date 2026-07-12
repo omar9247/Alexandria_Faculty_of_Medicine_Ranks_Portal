@@ -77,10 +77,11 @@
       font-family:'Source Serif 4',serif; font-weight:700; font-size:0.9rem;
       letter-spacing:0.5px; flex-shrink:0;
       box-shadow:0 6px 14px rgba(41,82,217,0.28);
+      transition:background 0.2s, border-color 0.2s;
     }
     .brand-text { line-height:1.25; }
-    .brand-text .b-title { font-family:'Source Serif 4',serif; font-weight:600; font-size:1rem; color:var(--ink); }
-    .brand-text .b-sub { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; }
+    .brand-text .b-title { font-family:'Source Serif 4',serif; font-weight:600; font-size:1rem; color:var(--ink); transition:color 0.2s; }
+    .brand-text .b-sub { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; transition:color 0.2s; }
 
     .contact-row { display:flex; flex-wrap:wrap; gap:8px; }
     .contact-chip {
@@ -93,24 +94,48 @@
     .contact-chip:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-soft); }
     .contact-chip i { color:var(--blue); font-size:0.82rem; }
 
+    /* Transparent header floating over the full-bleed hero photo (landing page only) */
+    .site-header.header-overlay {
+      position:absolute; top:0; left:0; width:100%;
+      background:transparent; border-bottom:none; z-index:10;
+    }
+    .header-overlay .crest-badge {
+      background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4);
+      backdrop-filter:blur(8px); box-shadow:none;
+    }
+    .header-overlay .brand-text .b-title { color:#fff; text-shadow:0 1px 8px rgba(0,0,0,0.35); }
+    .header-overlay .brand-text .b-sub   { color:#e2e8f7; text-shadow:0 1px 8px rgba(0,0,0,0.35); }
+    .header-overlay .contact-chip {
+      background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.4); color:#fff;
+      backdrop-filter:blur(8px);
+    }
+    .header-overlay .contact-chip i { color:#fff; }
+    .header-overlay .contact-chip:hover { background:rgba(255,255,255,0.24); border-color:#fff; color:#fff; }
+
     /* ── PAGE INNER SCROLL CONTAINERS ── */
     .page-inner {
-      min-height:calc(100% - 73px);
+      min-height:100%;
       display:flex; flex-direction:column; align-items:center;
       gap:0;
     }
 
-    /* ── HERO (Landing page photo) ── */
+    /* ── HERO (Landing page photo) — full-bleed, fills the first screen ── */
     .hero {
-      width:100%; position:relative;
-      min-height:300px;
-      display:flex; align-items:flex-end;
+      width:100%; position:relative; overflow:hidden;
+      min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
       /* BACKGROUND PHOTO — replace background.jpg with your image */
-      background-image:linear-gradient(180deg, rgba(10,16,30,0.35) 0%, rgba(10,16,30,0.55) 55%, rgba(10,16,30,0.86) 100%), url('background.jpg');
-      background-size:cover; background-position:center;
-      padding:56px 20px 40px;
+      background-image:linear-gradient(180deg, rgba(10,16,30,0.58) 0%, rgba(10,16,30,0.30) 32%, rgba(10,16,30,0.42) 65%, rgba(10,16,30,0.82) 100%), url('background.jpg');
+      background-size:cover; background-position:center; background-attachment:fixed;
+      padding:120px 20px 90px;
     }
-    .hero-inner { width:100%; max-width:640px; margin:0 auto; text-align:center; animation:fadeDown 0.7s ease both; }
+    /* soft fade at the very bottom of the hero into the page background below */
+    .hero::after {
+      content:''; position:absolute; left:0; right:0; bottom:0; height:180px;
+      background:linear-gradient(180deg, transparent, var(--bg));
+      pointer-events:none;
+    }
+    .hero-inner { width:100%; max-width:640px; margin:0 auto; text-align:center; animation:fadeDown 0.7s ease both; position:relative; z-index:1; }
     .hero-eyebrow {
       font-family:'Space Mono',monospace; font-size:0.68rem;
       letter-spacing:3px; color:#cfe0ff; text-transform:uppercase;
@@ -118,13 +143,19 @@
     }
     .hero-title {
       font-family:'Source Serif 4',serif; font-weight:600;
-      font-size:clamp(1.6rem,5vw,2.4rem); color:#fff; line-height:1.28;
+      font-size:clamp(1.8rem,6vw,3rem); color:#fff; line-height:1.28;
       text-shadow:0 2px 18px rgba(0,0,0,0.35);
     }
     .hero-rule {
       width:60px; height:3px; margin:20px auto 0; border-radius:2px;
       background:linear-gradient(90deg,var(--blue),var(--teal));
     }
+    .hero-scroll-cue {
+      position:absolute; left:50%; bottom:26px; transform:translateX(-50%);
+      color:#fff; opacity:0.75; font-size:1.1rem; z-index:1;
+      animation:bounce 1.8s ease-in-out infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,8px);} }
 
     /* ── SELECTION AREA ── */
     .select-wrap {
@@ -357,7 +388,7 @@
     @media(max-width:480px) {
       .card-top, .card-body-inner { padding-left:18px; padding-right:18px; }
       .site-header { padding:14px 16px; }
-      .hero { min-height:230px; padding:40px 16px 30px; }
+      .hero { min-height:100vh; padding:100px 16px 80px; background-attachment:scroll; }
     }
   </style>
 </head>
@@ -370,7 +401,7 @@
   ═══════════════════════════ -->
   <div id="page-landing" class="page">
 
-    <div class="site-header">
+    <div class="site-header header-overlay">
       <div class="brand">
         <div class="crest-badge"><i class="fas fa-chart-line"></i></div>
         <div class="brand-text">
@@ -390,12 +421,13 @@
 
     <div class="page-inner">
 
-      <!-- Hero with background photo -->
+      <!-- Hero with full-bleed background photo -->
       <div class="hero">
         <div class="hero-inner">
           <div class="hero-title">Check Your Results</div>
           <div class="hero-rule"></div>
         </div>
+        <div class="hero-scroll-cue"><i class="fas fa-chevron-down"></i></div>
       </div>
 
       <!-- Selection area -->
