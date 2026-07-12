@@ -57,7 +57,12 @@
       will-change:transform;
     }
 
-    #page-landing { transform:translateX(0);    opacity:1; }
+    #page-landing {
+      transform:translateX(0); opacity:1;
+      /* BACKGROUND PHOTO — replace background.jpg with your image. Covers the entire landing page, including the selection card area below the title. */
+      background-image:linear-gradient(180deg, rgba(8,14,26,0.62) 0%, rgba(8,14,26,0.40) 38%, rgba(8,14,26,0.55) 75%, rgba(8,14,26,0.72) 100%), url('background.jpg');
+      background-size:cover; background-position:center; background-attachment:fixed; background-repeat:no-repeat;
+    }
     #page-results  { transform:translateX(100%); opacity:0; pointer-events:none; }
     #page-landing.hidden  { transform:translateX(-100%); opacity:0; pointer-events:none; }
     #page-results.visible { transform:translateX(0);     opacity:1; pointer-events:all; }
@@ -119,21 +124,12 @@
       gap:0;
     }
 
-    /* ── HERO (Landing page photo) — full-bleed, fills the first screen ── */
+    /* ── HERO (title zone) — sits on the page-wide photo, no background of its own ── */
     .hero {
-      width:100%; position:relative; overflow:hidden;
-      min-height:100vh;
+      width:100%; position:relative;
+      min-height:78vh;
       display:flex; align-items:center; justify-content:center;
-      /* BACKGROUND PHOTO — replace background.jpg with your image */
-      background-image:linear-gradient(180deg, rgba(10,16,30,0.58) 0%, rgba(10,16,30,0.30) 32%, rgba(10,16,30,0.42) 65%, rgba(10,16,30,0.82) 100%), url('background.jpg');
-      background-size:cover; background-position:center; background-attachment:fixed;
-      padding:120px 20px 90px;
-    }
-    /* soft fade at the very bottom of the hero into the page background below */
-    .hero::after {
-      content:''; position:absolute; left:0; right:0; bottom:0; height:180px;
-      background:linear-gradient(180deg, transparent, var(--bg));
-      pointer-events:none;
+      padding:120px 20px 60px;
     }
     .hero-inner { width:100%; max-width:640px; margin:0 auto; text-align:center; animation:fadeDown 0.7s ease both; position:relative; z-index:1; }
     .hero-eyebrow {
@@ -157,22 +153,25 @@
     }
     @keyframes bounce { 0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,8px);} }
 
-    /* ── SELECTION AREA ── */
+    /* ── SELECTION AREA — sits directly on the photo, so text/card are styled for contrast ── */
     .select-wrap {
       width:100%; max-width:640px; margin:0 auto;
-      padding:34px 20px 70px;
+      padding:10px 20px 90px;
+      position:relative; z-index:1;
     }
     .select-label {
-      font-family:'Space Mono',monospace; font-size:0.68rem;
-      letter-spacing:2.5px; color:var(--muted); text-transform:uppercase;
-      display:flex; align-items:center; gap:10px; margin-bottom:16px;
+      font-family:'Space Mono',monospace; font-size:0.7rem;
+      letter-spacing:2.5px; color:#eef2fb; text-transform:uppercase;
+      display:flex; align-items:center; gap:10px; margin-bottom:18px;
+      text-shadow:0 1px 10px rgba(0,0,0,0.4);
     }
-    .select-label::before { content:''; width:20px; height:2px; background:var(--blue); border-radius:2px; }
+    .select-label::before { content:''; width:20px; height:2px; background:var(--teal); border-radius:2px; }
+    .select-label i { color:#fff; }
 
     .nav-card {
       width:100%; background:var(--white);
-      border:1px solid var(--border); border-radius:14px;
-      box-shadow:var(--shadow); overflow:visible;
+      border:1px solid rgba(255,255,255,0.5); border-radius:14px;
+      box-shadow:0 24px 60px rgba(4,8,18,0.4); overflow:visible;
       animation:fadeDown 0.7s 0.1s ease both;
     }
     .nav-list { padding:12px; display:flex; flex-direction:column; gap:6px; }
@@ -379,6 +378,10 @@
       color:var(--faint); font-size:0.72rem; font-family:'Space Mono',monospace;
       letter-spacing:0.5px; text-align:center; padding:30px 20px 10px;
     }
+    .site-footer.footer-on-photo {
+      color:rgba(255,255,255,0.75); text-shadow:0 1px 8px rgba(0,0,0,0.4);
+      position:relative; z-index:1;
+    }
 
     @keyframes fadeDown { from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:translateY(0)} }
     @keyframes slideUp  { from{opacity:0;transform:translateY(18px)}  to{opacity:1;transform:translateY(0)} }
@@ -388,7 +391,8 @@
     @media(max-width:480px) {
       .card-top, .card-body-inner { padding-left:18px; padding-right:18px; }
       .site-header { padding:14px 16px; }
-      .hero { min-height:100vh; padding:100px 16px 80px; background-attachment:scroll; }
+      .hero { min-height:64vh; padding:100px 16px 40px; }
+      #page-landing { background-attachment:scroll; }
     }
   </style>
 </head>
@@ -424,6 +428,7 @@
       <!-- Hero with full-bleed background photo -->
       <div class="hero">
         <div class="hero-inner">
+          <div class="hero-eyebrow">Student Ranks &amp; Results Registry</div>
           <div class="hero-title">Check Your Results</div>
           <div class="hero-rule"></div>
         </div>
@@ -490,7 +495,7 @@
         </div>
       </div>
 
-      <footer class="site-footer">&copy; Made by Omar Aboolo &middot; Class of 2030</footer>
+      <footer class="site-footer footer-on-photo">&copy; Made by Omar Aboolo &middot; Class of 2030</footer>
     </div>
   </div>
 
