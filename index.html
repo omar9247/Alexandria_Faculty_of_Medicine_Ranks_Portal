@@ -8,63 +8,38 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      /* Institutional palette — deep navy ledger, antique gold letterhead accent, warm ivory ink */
-      --navy-950:#0a1220; --navy-900:#0f1b30; --navy-800:#16233d; --navy-700:#1e2c48;
-      --gold:#c9a869; --gold-soft:#e3cd9a; --gold-dim:rgba(201,168,105,0.55);
-      --ivory:#f3ede0; --slate:#8b93a4;
-      --bg:#0a1220; --glass:rgba(15,27,48,0.62);
-      --border:rgba(201,168,105,0.16); --border-strong:rgba(201,168,105,0.34);
-      --text:#e7e1d2; --muted:#8b93a4;
-      --shadow:0 22px 54px rgba(0,0,0,0.55);
+      /* Institutional palette — flat, light, blue/teal — like a real university portal */
+      --blue:#2952d9; --blue-dark:#1c3aa8; --blue-soft:#eaf0ff;
+      --teal:#0e9c86; --teal-dark:#0b7d6b; --teal-soft:#e6f7f3;
+      --ink:#182238; --muted:#6b7688; --faint:#9aa3b2;
+      --bg:#f4f6fb; --white:#ffffff;
+      --border:#e4e9f1; --border-strong:#d3dcec;
+      --shadow:0 10px 28px rgba(24,34,56,0.07);
+      --shadow-lg:0 20px 48px rgba(24,34,56,0.12);
 
-      /* Grade seal tones — matte jewel colors, not neon */
-      --em:#1f7a5c; --em-lt:#2e9c78;
-      --sap:#2b5a8c; --sap-lt:#3d76b3;
-      --amb:#a9822f; --amb-lt:#c79c42;
-      --cop:#9c5330; --cop-lt:#bb6a42;
-      --gar:#8c2f39; --gar-lt:#b23e4a;
-      --slt:#3f4a5c; --slt-lt:#57667d;
+      /* Grade tones — flat, matte, matching dashboard reference */
+      --em:#0e9c86; --em-lt:#3fbfa8;
+      --sap:#2952d9; --sap-lt:#5b7de8;
+      --amb:#c9861a; --amb-lt:#e0a53f;
+      --cop:#c05a2c; --cop-lt:#d97b4d;
+      --gar:#c23b3b; --gar-lt:#dc5f5f;
+      --slt:#8b93a4; --slt-lt:#aab1bd;
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
     body {
       font-family:'Inter',sans-serif;
-      color:var(--text);
+      color:var(--ink);
       background-color:var(--bg);
-      /* BACKGROUND PHOTO — replace background.jpg with your image */
-      background-image:url('background.jpg');
-      background-size:cover;
-      background-position:center;
-      background-attachment:fixed;
       min-height:100vh;
-    }
-    body::before {
-      content:''; position:fixed; inset:0;
-      background:linear-gradient(160deg,rgba(10,18,32,0.93) 0%,rgba(10,18,32,0.90) 45%,rgba(6,11,20,0.95) 100%);
-      pointer-events:none; z-index:0;
-    }
-    body::after {
-      content:''; position:fixed;
-      top:-220px; left:50%; transform:translateX(-50%);
-      width:900px; height:560px;
-      background:radial-gradient(ellipse at center,rgba(201,168,105,0.08) 0%,transparent 70%);
-      pointer-events:none; z-index:0;
-    }
-    /* Letterhead rule — fixed hairline at the very top of the viewport */
-    .letterhead-bar {
-      position:fixed; top:0; left:0; width:100%; height:3px;
-      background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);
-      opacity:0.55; z-index:5; pointer-events:none;
     }
 
     /* ── VIEWPORT CONTAINER ── */
-    /* Each page fills the screen and slides horizontally.
-       The inner scroll-area handles vertical scrolling. */
     #app {
       position:relative;
       width:100vw;
       height:100vh;
-      overflow:hidden; /* clips the horizontal slide */
+      overflow:hidden;
     }
 
     .page {
@@ -76,360 +51,290 @@
       overflow-x:hidden;
       -webkit-overflow-scrolling:touch;
       z-index:1;
+      background:var(--bg);
       transition:transform 0.55s cubic-bezier(0.77,0,0.18,1),
                  opacity   0.55s cubic-bezier(0.77,0,0.18,1);
       will-change:transform;
     }
 
-    /* Default states */
     #page-landing { transform:translateX(0);    opacity:1; }
     #page-results  { transform:translateX(100%); opacity:0; pointer-events:none; }
-
-    /* Transitioned states */
     #page-landing.hidden  { transform:translateX(-100%); opacity:0; pointer-events:none; }
     #page-results.visible { transform:translateX(0);     opacity:1; pointer-events:all; }
 
-    /* ── PAGE INNER SCROLL CONTAINERS ── */
-    .page-inner {
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      padding:40px 20px 80px;
-      gap:32px;
-      position:relative;
-      z-index:1;
+    /* ── TOP HEADER (both pages) ── */
+    .site-header {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px; padding:16px 28px;
+      background:var(--white); border-bottom:1px solid var(--border);
+      position:relative; z-index:3;
     }
-
-    /* ── PROFILE ── */
-    .profile { text-align:center; animation:fadeDown 0.7s ease both; }
-
+    .brand { display:flex; align-items:center; gap:12px; }
     .crest-badge {
-      width:56px; height:56px; margin:0 auto 18px;
-      border:1px solid var(--border-strong); border-radius:2px;
+      width:42px; height:42px; border-radius:8px;
+      background:var(--blue); color:#fff;
       display:flex; align-items:center; justify-content:center;
-      font-family:'Source Serif 4',serif; font-weight:600; font-size:1.05rem;
-      letter-spacing:1px; color:var(--gold-soft);
-      background:rgba(201,168,105,0.05);
-      position:relative;
+      font-family:'Source Serif 4',serif; font-weight:700; font-size:0.9rem;
+      letter-spacing:0.5px; flex-shrink:0;
+      box-shadow:0 6px 14px rgba(41,82,217,0.28);
     }
-    .crest-badge::before, .crest-badge::after {
-      content:''; position:absolute; width:8px; height:8px;
-      border:1px solid var(--gold-dim);
-    }
-    .crest-badge::before { top:-1px; left:-1px; border-right:none; border-bottom:none; }
-    .crest-badge::after  { bottom:-1px; right:-1px; border-left:none; border-top:none; }
+    .brand-text { line-height:1.25; }
+    .brand-text .b-title { font-family:'Source Serif 4',serif; font-weight:600; font-size:1rem; color:var(--ink); }
+    .brand-text .b-sub { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; }
 
-    .eyebrow {
-      font-family:'Space Mono',monospace; font-size:0.66rem;
-      letter-spacing:3px; color:var(--gold-soft); text-transform:uppercase;
-      text-align:center; margin-bottom:10px;
-    }
-
-    .portal-title {
-      font-family:'Source Serif 4',serif;
-      font-size:clamp(1.6rem,5vw,2.35rem); font-weight:600; letter-spacing:-0.2px;
-      color:var(--ivory); line-height:1.28; margin-bottom:16px; text-align:center;
-    }
-    .title-rule {
-      width:64px; height:1px; margin:0 auto 26px;
-      background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);
-      position:relative;
-    }
-    .title-rule::before {
-      content:''; position:absolute; top:-1.5px; left:50%; transform:translateX(-50%);
-      width:4px; height:4px; background:var(--gold); transform:translateX(-50%) rotate(45deg);
-    }
-    .contact-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .contact-row { display:flex; flex-wrap:wrap; gap:8px; }
     .contact-chip {
-      display:flex; align-items:center; gap:8px;
-      padding:9px 20px; border-radius:3px;
-      border:1px solid var(--border); background:rgba(15,27,48,0.55);
-      backdrop-filter:blur(8px); color:var(--text);
-      font-size:0.85rem; font-weight:500; text-decoration:none;
-      letter-spacing:0.2px;
+      display:flex; align-items:center; gap:7px;
+      padding:8px 15px; border-radius:6px;
+      border:1px solid var(--border); background:var(--white);
+      color:var(--ink); font-size:0.82rem; font-weight:600; text-decoration:none;
       transition:all 0.2s;
     }
-    .contact-chip:hover {
-      border-color:var(--gold);
-      background:rgba(201,168,105,0.10);
-      color:var(--ivory); transform:translateY(-1px);
-    }
-    .contact-chip i { color:var(--gold); font-size:0.88rem; }
+    .contact-chip:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-soft); }
+    .contact-chip i { color:var(--blue); font-size:0.82rem; }
 
-    /* ── NAV CARD ── */
-    .nav-card {
-      width:100%; max-width:420px;
-      background:var(--glass); border:1px solid var(--border);
-      border-radius:4px; backdrop-filter:blur(14px);
-      box-shadow:var(--shadow);
-      animation:fadeDown 0.7s 0.15s ease both;
-      overflow:visible; /* allow dropdown to grow */
-      border-top:2px solid var(--gold-dim);
-    }
-    .nav-header {
-      padding:20px 24px 14px;
-      border-bottom:1px solid var(--border);
-    }
-    .nav-header-label {
-      font-family:'Space Mono',monospace; font-size:0.67rem;
-      letter-spacing:2.5px; color:var(--slate); text-transform:uppercase;
-      display:flex; align-items:center; gap:8px;
-    }
-    .nav-header-label::before {
-      content:''; display:block; width:18px; height:2px;
-      background:var(--gold); border-radius:0;
-    }
-
-    .nav-list { padding:10px; display:flex; flex-direction:column; gap:2px; }
-
-    /* Top-level nav button */
-    .nav-btn {
-      width:100%; display:flex; align-items:center; gap:14px;
-      padding:14px 12px;
-      background:transparent; border:none; border-left:2px solid transparent;
-      color:var(--text); font-family:'Inter',sans-serif;
-      font-size:0.95rem; font-weight:600;
-      cursor:pointer; text-align:left;
-      transition:background 0.2s, color 0.2s, border-color 0.2s;
-    }
-    .nav-btn:hover { background:rgba(201,168,105,0.06); color:var(--ivory); border-left-color:var(--gold); }
-
-    .nav-icon {
-      width:38px; height:38px; border-radius:2px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:0.92rem; flex-shrink:0;
-      border:1px solid var(--border-strong); background:rgba(201,168,105,0.04);
-      color:var(--gold-soft);
-    }
-    .icon-green, .icon-blue, .icon-purple {
-      background:rgba(201,168,105,0.04); color:var(--gold-soft); border:1px solid var(--border-strong);
-    }
-
-    .nav-text { flex:1; text-align:left; }
-    .nav-text small {
-      display:block; font-family:'Space Mono',monospace;
-      font-size:0.62rem; letter-spacing:1px;
-      color:var(--muted); margin-top:3px; font-weight:400;
-    }
-    .nav-arrow { font-size:0.7rem; color:var(--muted); transition:transform 0.25s, color 0.2s; }
-    .nav-btn:hover .nav-arrow { color:var(--gold); }
-    .nav-btn:hover .arrow-right { transform:translateX(3px); }
-    .arrow-down.open { transform:rotate(180deg); color:var(--gold); }
-
-    /* Expandable sub-list */
-    .nav-sub {
-      display:none; flex-direction:column; gap:4px;
-      padding:0 8px 6px 8px;
-    }
-    .nav-sub.open { display:flex; }
-
-    .nav-sub-btn {
-      width:100%; display:flex; align-items:center; gap:12px;
-      padding:11px 14px 11px 20px;
-      background:rgba(255,255,255,0.02);
-      border:1px solid var(--border); border-radius:2px;
-      color:var(--muted); font-family:'Inter',sans-serif;
-      font-size:0.86rem; font-weight:600;
-      cursor:pointer; text-align:left; transition:all 0.2s;
-    }
-    .nav-sub-btn:hover {
-      background:rgba(201,168,105,0.08);
-      border-color:var(--gold); color:var(--ivory);
-    }
-    .nav-sub-btn i { font-size:0.78rem; color:var(--gold); }
-
-    /* ── RESULTS PAGE ── */
-    #page-results .page-inner {
-      padding:28px 16px 80px;
+    /* ── PAGE INNER SCROLL CONTAINERS ── */
+    .page-inner {
+      min-height:calc(100% - 73px);
+      display:flex; flex-direction:column; align-items:center;
       gap:0;
     }
 
+    /* ── HERO (Landing page photo) ── */
+    .hero {
+      width:100%; position:relative;
+      min-height:300px;
+      display:flex; align-items:flex-end;
+      /* BACKGROUND PHOTO — replace background.jpg with your image */
+      background-image:linear-gradient(180deg, rgba(10,16,30,0.35) 0%, rgba(10,16,30,0.55) 55%, rgba(10,16,30,0.86) 100%), url('background.jpg');
+      background-size:cover; background-position:center;
+      padding:56px 20px 40px;
+    }
+    .hero-inner { width:100%; max-width:640px; margin:0 auto; text-align:center; animation:fadeDown 0.7s ease both; }
+    .hero-eyebrow {
+      font-family:'Space Mono',monospace; font-size:0.68rem;
+      letter-spacing:3px; color:#cfe0ff; text-transform:uppercase;
+      margin-bottom:12px;
+    }
+    .hero-title {
+      font-family:'Source Serif 4',serif; font-weight:600;
+      font-size:clamp(1.6rem,5vw,2.4rem); color:#fff; line-height:1.28;
+      text-shadow:0 2px 18px rgba(0,0,0,0.35);
+    }
+    .hero-rule {
+      width:60px; height:3px; margin:20px auto 0; border-radius:2px;
+      background:linear-gradient(90deg,var(--blue),var(--teal));
+    }
+
+    /* ── SELECTION AREA ── */
+    .select-wrap {
+      width:100%; max-width:640px; margin:0 auto;
+      padding:34px 20px 70px;
+    }
+    .select-label {
+      font-family:'Space Mono',monospace; font-size:0.68rem;
+      letter-spacing:2.5px; color:var(--muted); text-transform:uppercase;
+      display:flex; align-items:center; gap:10px; margin-bottom:16px;
+    }
+    .select-label::before { content:''; width:20px; height:2px; background:var(--blue); border-radius:2px; }
+
+    .nav-card {
+      width:100%; background:var(--white);
+      border:1px solid var(--border); border-radius:14px;
+      box-shadow:var(--shadow); overflow:visible;
+      animation:fadeDown 0.7s 0.1s ease both;
+    }
+    .nav-list { padding:12px; display:flex; flex-direction:column; gap:6px; }
+
+    .nav-btn {
+      width:100%; display:flex; align-items:center; gap:14px;
+      padding:16px 14px; border-radius:10px;
+      background:transparent; border:1px solid transparent;
+      color:var(--ink); font-family:'Inter',sans-serif;
+      font-size:0.98rem; font-weight:700; cursor:pointer; text-align:left;
+      transition:all 0.2s;
+    }
+    .nav-btn:hover { background:var(--blue-soft); border-color:var(--border-strong); }
+
+    .nav-icon {
+      width:42px; height:42px; border-radius:9px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1rem;
+    }
+    .icon-green { background:var(--teal-soft); color:var(--teal-dark); }
+    .icon-blue  { background:var(--blue-soft); color:var(--blue-dark); }
+    .icon-purple{ background:#f2eafc; color:#7c3aed; }
+
+    .nav-text { flex:1; }
+    .nav-text small {
+      display:block; font-family:'Space Mono',monospace;
+      font-size:0.63rem; letter-spacing:1px; color:var(--muted);
+      margin-top:3px; font-weight:400;
+    }
+    .nav-arrow { font-size:0.78rem; color:var(--faint); transition:transform 0.25s, color 0.2s; }
+    .nav-btn:hover .nav-arrow { color:var(--blue); }
+    .nav-btn:hover .arrow-right { transform:translateX(3px); }
+    .arrow-down.open { transform:rotate(180deg); color:var(--blue); }
+
+    .nav-sub { display:none; flex-direction:column; gap:5px; padding:0 10px 8px 10px; }
+    .nav-sub.open { display:flex; }
+    .nav-sub-btn {
+      width:100%; display:flex; align-items:center; gap:12px;
+      padding:13px 14px 13px 24px; background:var(--bg);
+      border:1px solid var(--border); border-radius:8px;
+      color:var(--ink); font-family:'Inter',sans-serif;
+      font-size:0.9rem; font-weight:600; cursor:pointer; text-align:left;
+      transition:all 0.2s;
+    }
+    .nav-sub-btn:hover { background:var(--blue-soft); border-color:var(--blue); color:var(--blue-dark); }
+    .nav-sub-btn i { font-size:0.82rem; color:var(--blue); }
+
+    /* ── RESULTS PAGE ── */
+    #page-results .page-inner { padding:0; align-items:stretch; }
+    .results-shell { width:100%; max-width:1040px; margin:0 auto; padding:26px 20px 70px; }
+
     .results-topbar {
-      width:100%; max-width:500px;
-      display:flex; align-items:center; gap:14px;
-      margin-bottom:24px;
+      display:flex; align-items:center; gap:16px; margin-bottom:22px; flex-wrap:wrap;
     }
     .back-btn {
       display:flex; align-items:center; gap:8px;
-      padding:10px 18px; border-radius:2px;
-      border:1px solid var(--border); background:var(--glass);
-      backdrop-filter:blur(10px); color:var(--muted);
-      font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:600;
-      cursor:pointer; transition:all 0.2s; flex-shrink:0;
+      padding:11px 18px; border-radius:9px;
+      border:1px solid var(--border); background:var(--white);
+      color:var(--muted); font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700;
+      cursor:pointer; transition:all 0.2s; flex-shrink:0; box-shadow:var(--shadow);
     }
-    .back-btn:hover { border-color:var(--gold); color:var(--ivory); }
-    .results-title { flex:1; min-width:0; }
-    .results-title h2 { font-family:'Source Serif 4',serif; font-size:1.2rem; font-weight:600; color:var(--ivory); line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .results-title span { font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:1.5px; color:var(--slate); text-transform:uppercase; }
+    .back-btn:hover { border-color:var(--blue); color:var(--blue); }
+    .results-title h2 { font-family:'Source Serif 4',serif; font-size:1.35rem; font-weight:600; color:var(--ink); line-height:1.2; }
+    .results-title span { font-family:'Space Mono',monospace; font-size:0.64rem; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; }
 
-    .results-card {
-      width:100%; max-width:500px;
-      background:var(--glass); border:1px solid var(--border);
-      border-radius:4px; box-shadow:var(--shadow);
-      backdrop-filter:blur(14px); overflow:hidden;
-      border-top:2px solid var(--gold-dim);
+    .results-grid { display:grid; grid-template-columns:1.05fr 1fr; gap:22px; align-items:start; }
+    @media (max-width:880px) { .results-grid { grid-template-columns:1fr; } }
+
+    .card {
+      background:var(--white); border:1px solid var(--border);
+      border-radius:14px; box-shadow:var(--shadow); overflow:hidden;
     }
     .card-top { padding:24px 24px 0; }
     .card-body-inner { padding:0 24px 24px; }
 
     .section-label {
-      font-family:'Space Mono',monospace; font-size:0.67rem;
-      letter-spacing:2px; color:var(--slate); text-transform:uppercase;
+      font-family:'Space Mono',monospace; font-size:0.68rem;
+      letter-spacing:2px; color:var(--muted); text-transform:uppercase;
       margin-bottom:16px; display:flex; align-items:center; gap:8px;
     }
-    .section-label::before {
-      content:''; display:block; width:16px; height:2px;
-      background:var(--gold); border-radius:0; flex-shrink:0;
-    }
-    .section-label i { color:var(--gold); font-size:0.7rem; }
+    .section-label::before { content:''; width:16px; height:2px; background:var(--blue); border-radius:2px; flex-shrink:0; }
+    .section-label i { color:var(--blue); font-size:0.72rem; }
 
     .input-wrap { position:relative; margin-bottom:13px; }
-    .input-wrap > i { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:var(--muted); }
+    .input-wrap > i { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:var(--faint); }
     .seat-input {
       width:100%; padding:15px 16px 15px 42px;
-      background:rgba(255,255,255,0.04);
-      border:1.5px solid var(--border); border-radius:3px;
-      color:var(--ivory); font-family:'Space Mono',monospace;
+      background:var(--bg); border:1.5px solid var(--border); border-radius:9px;
+      color:var(--ink); font-family:'Space Mono',monospace;
       font-size:1.05rem; letter-spacing:2px; outline:none;
       transition:border-color 0.2s, background 0.2s;
     }
-    .seat-input::placeholder { color:var(--muted); letter-spacing:1px; }
-    .seat-input:focus { border-color:var(--gold); background:rgba(201,168,105,0.06); }
+    .seat-input::placeholder { color:var(--faint); letter-spacing:1px; }
+    .seat-input:focus { border-color:var(--blue); background:var(--white); box-shadow:0 0 0 4px var(--blue-soft); }
 
     .btn-search {
-      width:100%; padding:15px; border-radius:3px; border:1.5px solid var(--gold);
-      background:transparent;
-      color:var(--gold-soft); font-family:'Inter',sans-serif;
-      font-size:0.92rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;
-      cursor:pointer; transition:all 0.25s;
+      width:100%; padding:15px; border-radius:9px; border:none;
+      background:var(--blue); color:#fff;
+      font-family:'Inter',sans-serif; font-size:0.93rem; font-weight:700;
+      letter-spacing:0.4px; text-transform:uppercase; cursor:pointer;
+      transition:all 0.2s; box-shadow:0 10px 22px rgba(41,82,217,0.25);
     }
-    .btn-search:hover { background:var(--gold); color:var(--navy-950); box-shadow:0 12px 30px rgba(201,168,105,0.18); }
-    .btn-search:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+    .btn-search:hover { background:var(--blue-dark); transform:translateY(-1px); }
+    .btn-search:disabled { opacity:0.55; cursor:not-allowed; transform:none; }
 
     .loader {
-      display:none; width:34px; height:34px;
-      border:3px solid rgba(255,255,255,0.08);
-      border-top-color:var(--gold); border-radius:50%;
-      animation:spin 0.8s linear infinite; margin:20px auto 0;
+      display:none; width:32px; height:32px;
+      border:3px solid var(--border); border-top-color:var(--blue);
+      border-radius:50%; animation:spin 0.8s linear infinite; margin:20px auto 0;
     }
     .error-msg {
       display:none; margin-top:16px; padding:12px 16px;
-      background:rgba(140,47,57,0.14); border:1px solid rgba(140,47,57,0.4);
-      border-radius:3px; color:#e08e94; font-size:0.87rem; text-align:center;
+      background:#fdecec; border:1px solid #f6c6c6;
+      border-radius:8px; color:#b23434; font-size:0.87rem; text-align:center; font-weight:600;
     }
     .result-area { display:none; margin-top:20px; animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
     .divider { height:1px; background:var(--border); margin:16px 0; }
 
-    .grade-wrap { display:flex; flex-direction:column; align-items:center; margin-bottom:16px; }
+    .grade-wrap { display:flex; flex-direction:column; align-items:center; margin-bottom:18px; }
     .grade-circle {
-      width:88px; height:88px; border-radius:50%;
+      width:92px; height:92px; border-radius:50%;
       display:flex; align-items:center; justify-content:center;
-      font-family:'Space Mono',monospace;
-      font-size:0.78rem; font-weight:700; letter-spacing:0.5px; color:var(--ivory);
-      margin-bottom:12px; text-align:center; line-height:1.25; padding:8px;
-      border:1.5px solid var(--gold-dim);
-      box-shadow:inset 0 0 0 4px rgba(10,18,32,0.35);
+      font-family:'Space Mono',monospace; font-size:0.78rem; font-weight:700;
+      letter-spacing:0.4px; color:#fff; margin-bottom:12px;
+      text-align:center; line-height:1.25; padding:8px;
+      box-shadow:0 12px 26px rgba(24,34,56,0.18);
     }
-    .grade-label { font-family:'Source Serif 4',serif; font-weight:600; font-size:1.1rem; color:var(--ivory); }
+    .grade-label { font-family:'Source Serif 4',serif; font-weight:600; font-size:1.15rem; color:var(--ink); }
 
-    .bg-Excellent { background:var(--em); box-shadow:inset 0 0 0 4px rgba(10,18,32,0.3), 0 8px 22px rgba(31,122,92,0.25); }
-    .bg-VeryGood  { background:var(--sap); box-shadow:inset 0 0 0 4px rgba(10,18,32,0.3), 0 8px 22px rgba(43,90,140,0.25); }
-    .bg-Good      { background:var(--amb); box-shadow:inset 0 0 0 4px rgba(10,18,32,0.3), 0 8px 22px rgba(169,130,47,0.25); }
-    .bg-Poor      { background:var(--cop); box-shadow:inset 0 0 0 4px rgba(10,18,32,0.3), 0 8px 22px rgba(156,83,48,0.25); }
-    .bg-Fail      { background:var(--gar); box-shadow:inset 0 0 0 4px rgba(10,18,32,0.3), 0 8px 22px rgba(140,47,57,0.25); }
+    .bg-Excellent { background:var(--em); }
+    .bg-VeryGood  { background:var(--sap); }
+    .bg-Good      { background:var(--amb); }
+    .bg-Poor      { background:var(--cop); }
+    .bg-Fail      { background:var(--gar); }
     .bg-Default   { background:var(--slt); }
 
     .student-info {
-      background:rgba(255,255,255,0.03); border:1px solid var(--border);
-      border-left:2px solid var(--gold-dim);
-      border-radius:2px; padding:14px 18px; margin-bottom:12px;
+      background:var(--bg); border:1px solid var(--border);
+      border-left:3px solid var(--blue);
+      border-radius:8px; padding:14px 18px; margin-bottom:12px;
     }
-    .student-name { font-family:'Source Serif 4',serif; font-size:1.1rem; font-weight:600; color:var(--ivory); margin-bottom:4px; }
+    .student-name { font-family:'Source Serif 4',serif; font-size:1.1rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
     .student-seat { font-family:'Space Mono',monospace; font-size:0.77rem; color:var(--muted); }
 
-    .stats-grid { display:flex; flex-direction:column; gap:6px; }
+    .stats-grid { display:flex; flex-direction:column; gap:8px; }
     .stat-row {
       display:flex; justify-content:space-between; align-items:center;
-      padding:12px 15px; background:rgba(255,255,255,0.03);
-      border:1px solid var(--border); border-radius:2px;
+      padding:13px 15px; background:var(--bg);
+      border:1px solid var(--border); border-radius:8px;
     }
-    .stat-label { color:var(--slate); font-size:0.87rem; display:flex; align-items:center; gap:7px; }
-    .stat-label i { font-size:0.75rem; color:var(--gold); }
-    .stat-val { font-weight:700; font-size:0.93rem; color:var(--ivory); font-family:'Space Mono',monospace; }
+    .stat-label { color:var(--muted); font-size:0.87rem; font-weight:600; display:flex; align-items:center; gap:7px; }
+    .stat-label i { font-size:0.78rem; color:var(--blue); }
+    .stat-val { font-weight:700; font-size:0.95rem; color:var(--ink); font-family:'Space Mono',monospace; }
 
-    .site-footer {
-      color:var(--muted); font-size:0.72rem;
-      font-family:'Space Mono',monospace; letter-spacing:0.5px;
-      text-align:center; position:relative; z-index:1;
-      margin-top:auto; padding-top:30px;
-      opacity:0.75;
-    }
+    /* ── STATS PANEL (class-wide) ── */
+    .stats-panel { animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+    .stats-card { padding:24px; }
 
-    @keyframes fadeDown { from{opacity:0;transform:translateY(-22px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes slideUp  { from{opacity:0;transform:translateY(22px)}  to{opacity:1;transform:translateY(0)} }
-    @keyframes spin     { to{transform:rotate(360deg)} }
-    @keyframes shake    { 0%,100%{transform:translateX(0)} 25%,75%{transform:translateX(-6px)} 50%{transform:translateX(6px)} }
-
-    @media(max-width:480px) {
-      .card-top, .card-body-inner { padding-left:18px; padding-right:18px; }
-    }
-
-    /* ── STATS PANEL ── */
-    .stats-panel {
-      width:100%; max-width:500px;
-      margin-top:16px;
-      animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
-    }
-    .stats-card {
-      background:var(--glass); border:1px solid var(--border);
-      border-radius:4px; padding:22px;
-      backdrop-filter:blur(14px); box-shadow:var(--shadow);
-      border-top:2px solid var(--gold-dim);
-    }
     .stats-section-label {
-      font-family:'Space Mono',monospace; font-size:0.65rem;
-      letter-spacing:2px; color:var(--slate); text-transform:uppercase;
+      font-family:'Space Mono',monospace; font-size:0.66rem;
+      letter-spacing:2px; color:var(--muted); text-transform:uppercase;
       margin-bottom:14px; display:flex; align-items:center; gap:8px;
     }
-    .stats-section-label::before {
-      content:''; display:block; width:14px; height:2px;
-      background:var(--gold); border-radius:0;
-    }
-    .stats-section-label i { color:var(--gold); font-size:0.68rem; }
+    .stats-section-label::before { content:''; width:14px; height:2px; background:var(--teal); border-radius:2px; }
+    .stats-section-label i { color:var(--teal); font-size:0.7rem; }
 
-    /* Key stat boxes */
-    .key-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:22px; }
+    .key-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:24px; }
     .key-stat-box {
-      background:rgba(255,255,255,0.03); border:1px solid var(--border);
-      border-radius:2px; padding:14px 10px; text-align:center;
+      background:var(--bg); border:1px solid var(--border);
+      border-top:3px solid var(--teal);
+      border-radius:10px; padding:16px 10px; text-align:center;
       transition:border-color 0.2s;
     }
-    .key-stat-box:hover { border-color:var(--gold-dim); }
+    .key-stat-box:hover { border-color:var(--teal); }
     .key-stat-val {
-      font-family:'Space Mono',monospace; font-size:1rem; font-weight:700;
-      color:var(--ivory); margin-bottom:4px; line-height:1.2;
+      font-family:'Space Mono',monospace; font-size:1.15rem; font-weight:700;
+      color:var(--ink); margin-bottom:5px; line-height:1.2;
     }
-    .key-stat-lbl { font-size:0.7rem; color:var(--muted); line-height:1.3; }
+    .key-stat-lbl { font-size:0.72rem; color:var(--muted); line-height:1.3; font-weight:600; }
 
-    /* Loading shimmer */
     .shimmer {
-      background:linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 75%);
-      background-size:200% 100%;
-      animation:shimmer 1.4s infinite;
-      border-radius:6px;
-      color:transparent !important;
-      pointer-events:none;
+      background:linear-gradient(90deg, #e9edf5 25%, #f6f8fc 50%, #e9edf5 75%);
+      background-size:200% 100%; animation:shimmer 1.4s infinite;
+      border-radius:6px; color:transparent !important; pointer-events:none;
     }
     @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-    /* Distribution chart */
-    .dist-chart { display:flex; flex-direction:column; gap:9px; }
+    .dist-chart { display:flex; flex-direction:column; gap:10px; }
     .dist-row { display:flex; align-items:center; gap:10px; }
-    .dist-label { font-size:0.76rem; font-weight:600; color:var(--text); width:76px; flex-shrink:0; text-align:right; }
-    .dist-bar-wrap { flex:1; background:rgba(255,255,255,0.05); border-radius:2px; height:8px; overflow:hidden; }
-    .dist-bar { height:100%; border-radius:2px; transition:width 0.9s cubic-bezier(0.16,1,0.3,1); width:0%; }
-    .dist-count { font-family:'Space Mono',monospace; font-size:0.72rem; color:var(--muted); width:32px; text-align:right; flex-shrink:0; }
+    .dist-label { font-size:0.78rem; font-weight:700; color:var(--ink); width:80px; flex-shrink:0; text-align:right; }
+    .dist-bar-wrap { flex:1; background:var(--bg); border:1px solid var(--border); border-radius:6px; height:10px; overflow:hidden; }
+    .dist-bar { height:100%; border-radius:6px; transition:width 0.9s cubic-bezier(0.16,1,0.3,1); width:0%; }
+    .dist-count { font-family:'Space Mono',monospace; font-size:0.74rem; color:var(--muted); width:32px; text-align:right; flex-shrink:0; font-weight:700; }
 
     .bar-excellent { background:var(--em-lt); }
     .bar-verygood  { background:var(--sap-lt); }
@@ -437,13 +342,26 @@
     .bar-poor      { background:var(--cop-lt); }
     .bar-fail      { background:var(--gar-lt); }
 
-    .stats-note { font-size:0.72rem; color:var(--muted); text-align:center; margin-top:14px; font-family:'Space Mono',monospace; }
-    .stats-error { font-size:0.8rem; color:#e08e94; text-align:center; padding:16px 0; }
+    .stats-note { font-size:0.74rem; color:var(--muted); text-align:center; margin-top:16px; font-family:'Space Mono',monospace; }
+
+    .site-footer {
+      color:var(--faint); font-size:0.72rem; font-family:'Space Mono',monospace;
+      letter-spacing:0.5px; text-align:center; padding:30px 20px 10px;
+    }
+
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes slideUp  { from{opacity:0;transform:translateY(18px)}  to{opacity:1;transform:translateY(0)} }
+    @keyframes spin     { to{transform:rotate(360deg)} }
+    @keyframes shake    { 0%,100%{transform:translateX(0)} 25%,75%{transform:translateX(-6px)} 50%{transform:translateX(6px)} }
+
+    @media(max-width:480px) {
+      .card-top, .card-body-inner { padding-left:18px; padding-right:18px; }
+      .site-header { padding:14px 16px; }
+      .hero { min-height:230px; padding:40px 16px 30px; }
+    }
   </style>
 </head>
 <body>
-
-<div class="letterhead-bar"></div>
 
 <div id="app">
 
@@ -451,83 +369,93 @@
        PAGE 1 — LANDING
   ═══════════════════════════ -->
   <div id="page-landing" class="page">
+
+    <div class="site-header">
+      <div class="brand">
+        <div class="crest-badge"><i class="fas fa-chart-line"></i></div>
+        <div class="brand-text">
+          <div class="b-title">Ranks Portal</div>
+          <div class="b-sub">Student Results &amp; Rankings</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <a class="contact-chip" href="https://t.me/OmarAboolo" target="_blank">
+          <i class="fab fa-telegram"></i> Telegram
+        </a>
+        <a class="contact-chip" href="/cdn-cgi/l/email-protection#b9f6d4d8cbd8dbd6d6d5d6808b8ddad6c9c0f9ded4d8d0d597dad6d4">
+          <i class="fas fa-envelope"></i> Email
+        </a>
+      </div>
+    </div>
+
     <div class="page-inner">
 
-      <!-- Profile -->
-      <div class="profile">
-        <div class="crest-badge">AFM</div>
-        <div class="eyebrow">Faculty of Medicine &middot; Alexandria University</div>
-        <div class="portal-title">Student Ranks &amp; Results Registry</div>
-        <div class="title-rule"></div>
-        <div class="contact-row">
-          <a class="contact-chip" href="https://t.me/OmarAboolo" target="_blank">
-            <i class="fab fa-telegram"></i> Telegram
-          </a>
-          <a class="contact-chip" href="/cdn-cgi/l/email-protection#b9f6d4d8cbd8dbd6d6d5d6808b8ddad6c9c0f9ded4d8d0d597dad6d4">
-            <i class="fas fa-envelope"></i> Email
-          </a>
+      <!-- Hero with background photo -->
+      <div class="hero">
+        <div class="hero-inner">
+          <div class="hero-eyebrow">Student Ranks &amp; Results Registry</div>
+          <div class="hero-title">Check Your Results</div>
+          <div class="hero-rule"></div>
         </div>
       </div>
 
-      <!-- Navigation menu -->
-      <div class="nav-card">
-        <div class="nav-header">
-          <div class="nav-header-label">
-            <i class="fas fa-bars" style="color:var(--gold);font-size:0.7rem;"></i>&nbsp; Select Results
-          </div>
-        </div>
+      <!-- Selection area -->
+      <div class="select-wrap">
+        <div class="select-label"><i class="fas fa-list-check" style="color:var(--blue);"></i>&nbsp; Select Academic Year</div>
 
-        <div class="nav-list">
+        <div class="nav-card">
+          <div class="nav-list">
 
-          <!-- 1st Year -->
-          <div>
-            <button class="nav-btn" onclick="goToResults('y1')">
-              <span class="nav-icon icon-green"><i class="fas fa-seedling"></i></span>
-              <span class="nav-text">
-                1st Year
-                <small>CLASS OF 2030 &middot; RANK</small>
-              </span>
-              <i class="fas fa-chevron-right nav-arrow arrow-right"></i>
-            </button>
-          </div>
-
-          <!-- 2nd Year — expandable -->
-          <div>
-            <button class="nav-btn" onclick="toggleSub('y2-sub','y2-arrow')">
-              <span class="nav-icon icon-blue"><i class="fas fa-book-open"></i></span>
-              <span class="nav-text">
-                2nd Year
-                <small>CLASS OF 2029 &middot; TWO MODES</small>
-              </span>
-              <i class="fas fa-chevron-down nav-arrow arrow-down" id="y2-arrow"></i>
-            </button>
-            <div class="nav-sub" id="y2-sub">
-              <button class="nav-sub-btn" onclick="goToResults('accum')">
-                <i class="fas fa-layer-group"></i> Accumulative Grade
-              </button>
-              <button class="nav-sub-btn" onclick="goToResults('y2nd')">
-                <i class="fas fa-calendar-check"></i> 2nd Year Grade
-              </button>
-            </div>
-          </div>
-
-          <!--
-            TO ADD A NEW SECTION, copy the block below and customize:
-
+            <!-- 1st Year -->
             <div>
-              <button class="nav-btn" onclick="goToResults('KEY')">
-                <span class="nav-icon icon-purple"><i class="fas fa-ICON"></i></span>
+              <button class="nav-btn" onclick="goToResults('y1')">
+                <span class="nav-icon icon-green"><i class="fas fa-medal"></i></span>
                 <span class="nav-text">
-                  Title
-                  <small>SUBTITLE</small>
+                  1st Year
+                  <small>CLASS OF 2030 &middot; RANK</small>
                 </span>
                 <i class="fas fa-chevron-right nav-arrow arrow-right"></i>
               </button>
             </div>
 
-            Then add the KEY to MODE_META in the script below.
-          -->
+            <!-- 2nd Year — expandable -->
+            <div>
+              <button class="nav-btn" onclick="toggleSub('y2-sub','y2-arrow')">
+                <span class="nav-icon icon-blue"><i class="fas fa-graduation-cap"></i></span>
+                <span class="nav-text">
+                  2nd Year
+                  <small>CLASS OF 2029 &middot; TWO MODES</small>
+                </span>
+                <i class="fas fa-chevron-down nav-arrow arrow-down" id="y2-arrow"></i>
+              </button>
+              <div class="nav-sub" id="y2-sub">
+                <button class="nav-sub-btn" onclick="goToResults('accum')">
+                  <i class="fas fa-chart-line"></i> Accumulative Grade
+                </button>
+                <button class="nav-sub-btn" onclick="goToResults('y2nd')">
+                  <i class="fas fa-calendar-check"></i> 2nd Year Grade
+                </button>
+              </div>
+            </div>
 
+            <!--
+              TO ADD A NEW SECTION, copy the block below and customize:
+
+              <div>
+                <button class="nav-btn" onclick="goToResults('KEY')">
+                  <span class="nav-icon icon-purple"><i class="fas fa-ICON"></i></span>
+                  <span class="nav-text">
+                    Title
+                    <small>SUBTITLE</small>
+                  </span>
+                  <i class="fas fa-chevron-right nav-arrow arrow-right"></i>
+                </button>
+              </div>
+
+              Then add the KEY to MODE_META in the script below.
+            -->
+
+          </div>
         </div>
       </div>
 
@@ -540,127 +468,150 @@
        PAGE 2 — RESULTS
   ═══════════════════════════ -->
   <div id="page-results" class="page">
+
+    <div class="site-header">
+      <div class="brand">
+        <div class="crest-badge"><i class="fas fa-chart-line"></i></div>
+        <div class="brand-text">
+          <div class="b-title">Ranks Portal</div>
+          <div class="b-sub">Student Results &amp; Rankings</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <a class="contact-chip" href="https://t.me/OmarAboolo" target="_blank">
+          <i class="fab fa-telegram"></i> Telegram
+        </a>
+      </div>
+    </div>
+
     <div class="page-inner">
+      <div class="results-shell">
 
-      <div class="results-topbar">
-        <button class="back-btn" onclick="goBack()">
-          <i class="fas fa-arrow-left"></i> Back
-        </button>
-        <div class="results-title">
-          <h2 id="results-heading">Results</h2>
-          <span id="results-subheading">&mdash;</span>
-        </div>
-      </div>
-
-      <div class="results-card">
-        <div class="card-top">
-          <div class="section-label">
-            <i id="results-icon" class="fas fa-seedling"></i>
-            <span id="results-label-text">&mdash;</span>
-          </div>
-          <div class="input-wrap">
-            <i class="fas fa-hashtag"></i>
-            <input class="seat-input" id="seat-input" type="text" placeholder="Enter Seat Number" />
-          </div>
-        </div>
-        <div class="card-body-inner">
-          <button class="btn-search" id="search-btn" onclick="doSearch()">
-            <i class="fas fa-search" style="margin-right:8px;"></i>Search Results
+        <div class="results-topbar">
+          <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> Back
           </button>
-          <div class="loader" id="loader"></div>
-          <div class="error-msg" id="error-msg">
-            <i class="fas fa-triangle-exclamation" style="margin-right:6px;"></i>
-            Seat number not found. Please try again.
-          </div>
-          <div class="result-area" id="result-area">
-            <div class="divider"></div>
-            <div class="grade-wrap">
-              <div class="grade-circle bg-Default" id="grade-circle">&mdash;</div>
-              <div class="grade-label" id="grade-label">&mdash;</div>
-            </div>
-            <div class="student-info">
-              <div class="student-name" id="res-name">&mdash;</div>
-              <div class="student-seat">
-                <i class="fas fa-fingerprint" style="margin-right:6px;"></i>
-                <span id="res-seat">&mdash;</span>
-              </div>
-            </div>
-            <div class="stats-grid">
-              <div class="stat-row">
-                <span class="stat-label"><i class="fas fa-trophy"></i> Class Rank</span>
-                <span class="stat-val" id="res-rank">#&mdash;</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-label"><i class="fas fa-sigma"></i> Total Score</span>
-                <span class="stat-val" id="res-total">&mdash;</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-label"><i class="fas fa-percent"></i> Percentage</span>
-                <span class="stat-val" id="res-percent">&mdash;</span>
-              </div>
-            </div>
+          <div class="results-title">
+            <h2 id="results-heading">Results</h2>
+            <span id="results-subheading">&mdash;</span>
           </div>
         </div>
-      </div>
 
-      <!-- Stats panel -->
-      <div class="stats-panel" id="stats-panel">
-        <div class="stats-card">
-          <div class="stats-section-label"><i class="fas fa-bolt"></i> Key Numbers</div>
-          <div class="key-stats">
-            <div class="key-stat-box">
-              <div class="key-stat-val" id="stat-max">—</div>
-              <div class="key-stat-lbl">Highest<br>Score</div>
+        <div class="results-grid">
+
+          <!-- LEFT: search + individual result -->
+          <div class="card">
+            <div class="card-top">
+              <div class="section-label">
+                <i id="results-icon" class="fas fa-seedling"></i>
+                <span id="results-label-text">&mdash;</span>
+              </div>
+              <div class="input-wrap">
+                <i class="fas fa-hashtag"></i>
+                <input class="seat-input" id="seat-input" type="text" placeholder="Enter Seat Number" />
+              </div>
             </div>
-            <div class="key-stat-box">
-              <div class="key-stat-val" id="stat-top100">—</div>
-              <div class="key-stat-lbl">Top 100<br>Cutoff</div>
-            </div>
-            <div class="key-stat-box">
-              <div class="key-stat-val" id="stat-top200">—</div>
-              <div class="key-stat-lbl">Top 200<br>Cutoff</div>
+            <div class="card-body-inner">
+              <button class="btn-search" id="search-btn" onclick="doSearch()">
+                <i class="fas fa-search" style="margin-right:8px;"></i>Search Results
+              </button>
+              <div class="loader" id="loader"></div>
+              <div class="error-msg" id="error-msg">
+                <i class="fas fa-triangle-exclamation" style="margin-right:6px;"></i>
+                Seat number not found. Please try again.
+              </div>
+              <div class="result-area" id="result-area">
+                <div class="divider"></div>
+                <div class="grade-wrap">
+                  <div class="grade-circle bg-Default" id="grade-circle">&mdash;</div>
+                  <div class="grade-label" id="grade-label">&mdash;</div>
+                </div>
+                <div class="student-info">
+                  <div class="student-name" id="res-name">&mdash;</div>
+                  <div class="student-seat">
+                    <i class="fas fa-fingerprint" style="margin-right:6px;"></i>
+                    <span id="res-seat">&mdash;</span>
+                  </div>
+                </div>
+                <div class="stats-grid">
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-trophy"></i> Class Rank</span>
+                    <span class="stat-val" id="res-rank">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-sigma"></i> Total Score</span>
+                    <span class="stat-val" id="res-total">&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-percent"></i> Percentage</span>
+                    <span class="stat-val" id="res-percent">&mdash;</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="stats-section-label"><i class="fas fa-chart-bar"></i> Grade Distribution</div>
-          <div class="dist-chart">
-            <div class="dist-row">
-              <span class="dist-label">Excellent</span>
-              <div class="dist-bar-wrap"><div class="dist-bar bar-excellent" id="bar-excellent"></div></div>
-              <span class="dist-count" id="cnt-excellent">0</span>
-            </div>
-            <div class="dist-row">
-              <span class="dist-label">Very Good</span>
-              <div class="dist-bar-wrap"><div class="dist-bar bar-verygood" id="bar-verygood"></div></div>
-              <span class="dist-count" id="cnt-verygood">0</span>
-            </div>
-            <div class="dist-row">
-              <span class="dist-label">Good</span>
-              <div class="dist-bar-wrap"><div class="dist-bar bar-good" id="bar-good"></div></div>
-              <span class="dist-count" id="cnt-good">0</span>
-            </div>
-            <div class="dist-row">
-              <span class="dist-label">Poor</span>
-              <div class="dist-bar-wrap"><div class="dist-bar bar-poor" id="bar-poor"></div></div>
-              <span class="dist-count" id="cnt-poor">0</span>
-            </div>
-            <div class="dist-row">
-              <span class="dist-label">Fail</span>
-              <div class="dist-bar-wrap"><div class="dist-bar bar-fail" id="bar-fail"></div></div>
-              <span class="dist-count" id="cnt-fail">0</span>
+
+          <!-- RIGHT: class-wide stats -->
+          <div class="card stats-panel" id="stats-panel">
+            <div class="stats-card">
+              <div class="stats-section-label"><i class="fas fa-bolt"></i> Key Numbers</div>
+              <div class="key-stats">
+                <div class="key-stat-box">
+                  <div class="key-stat-val" id="stat-max">—</div>
+                  <div class="key-stat-lbl">Highest<br>Score</div>
+                </div>
+                <div class="key-stat-box">
+                  <div class="key-stat-val" id="stat-top100">—</div>
+                  <div class="key-stat-lbl">Top 100<br>Cutoff</div>
+                </div>
+                <div class="key-stat-box">
+                  <div class="key-stat-val" id="stat-top200">—</div>
+                  <div class="key-stat-lbl">Top 200<br>Cutoff</div>
+                </div>
+              </div>
+              <div class="stats-section-label"><i class="fas fa-chart-bar"></i> Grade Distribution</div>
+              <div class="dist-chart">
+                <div class="dist-row">
+                  <span class="dist-label">Excellent</span>
+                  <div class="dist-bar-wrap"><div class="dist-bar bar-excellent" id="bar-excellent"></div></div>
+                  <span class="dist-count" id="cnt-excellent">0</span>
+                </div>
+                <div class="dist-row">
+                  <span class="dist-label">Very Good</span>
+                  <div class="dist-bar-wrap"><div class="dist-bar bar-verygood" id="bar-verygood"></div></div>
+                  <span class="dist-count" id="cnt-verygood">0</span>
+                </div>
+                <div class="dist-row">
+                  <span class="dist-label">Good</span>
+                  <div class="dist-bar-wrap"><div class="dist-bar bar-good" id="bar-good"></div></div>
+                  <span class="dist-count" id="cnt-good">0</span>
+                </div>
+                <div class="dist-row">
+                  <span class="dist-label">Poor</span>
+                  <div class="dist-bar-wrap"><div class="dist-bar bar-poor" id="bar-poor"></div></div>
+                  <span class="dist-count" id="cnt-poor">0</span>
+                </div>
+                <div class="dist-row">
+                  <span class="dist-label">Fail</span>
+                  <div class="dist-bar-wrap"><div class="dist-bar bar-fail" id="bar-fail"></div></div>
+                  <span class="dist-count" id="cnt-fail">0</span>
+                </div>
+              </div>
+              <div class="stats-note" id="stats-total-note">Search first to load statistics</div>
             </div>
           </div>
-          <div class="stats-note" id="stats-total-note">Search first to load statistics</div>
+
         </div>
-      </div>
 
-      <footer class="site-footer">&copy; Made by Omar Aboolo &middot; Class of 2030</footer>
+        <footer class="site-footer">&copy; Made by Omar Aboolo &middot; Class of 2030</footer>
+      </div>
     </div>
   </div>
 
 </div><!-- /app -->
 
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   /* ════════════════════════════════════
      API URLS
   ════════════════════════════════════ */
@@ -678,8 +629,8 @@
      matching the key in APIS above.
   ════════════════════════════════════ */
   const MODE_META = {
-    y1:    { heading:"1st Year Results",     sub:"CLASS OF 2030 · RANK",          label:"1st Year · Class of 2030",      icon:"fa-seedling"       },
-    accum: { heading:"Accumulative Results", sub:"2ND YEAR · CLASS OF 2029",      label:"2nd Year · Accumulative Grade", icon:"fa-layer-group"    },
+    y1:    { heading:"1st Year Results",     sub:"CLASS OF 2030 · RANK",          label:"1st Year · Class of 2030",      icon:"fa-medal"          },
+    accum: { heading:"Accumulative Results", sub:"2ND YEAR · CLASS OF 2029",      label:"2nd Year · Accumulative Grade", icon:"fa-chart-line"     },
     y2nd:  { heading:"2nd Year Results",     sub:"2ND YEAR ONLY · CLASS OF 2029", label:"2nd Year · Year Grade",         icon:"fa-calendar-check" },
   };
 
@@ -777,7 +728,7 @@
             cachedStats[currentMode] = data.stats;
             renderStats(data.stats);
           }
-          const card = document.querySelector('.results-card');
+          const card = document.querySelector('.results-grid .card');
           card.style.animation = 'none';
           requestAnimationFrame(() => { card.style.animation = 'shake 0.5s'; });
         }
@@ -868,7 +819,7 @@ function fetchStats(mode) {
     } else {
       showStatsLoading();
       document.getElementById('stats-total-note').innerText = 'Loading statistics...';
-      
+
       // Fetch the hardcopied stats immediately using a blank search
       const url = APIS[mode];
       if (url && !url.includes('YOUR_')) {
