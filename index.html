@@ -286,11 +286,11 @@
 
     .btn-search {
       width:100%; padding:15px; border-radius:9px; border:none;
-      background:var(--blue); color:#fff;
+      background:var(--teal); color:#fff;
       font-family:'Inter',sans-serif; font-size:0.93rem; font-weight:700;
       letter-spacing:0.4px; text-transform:uppercase; cursor:pointer;
       position:relative; overflow:hidden;
-      box-shadow:0 10px 22px rgba(41,82,217,0.25);
+      box-shadow:0 10px 22px rgba(14,156,134,0.25);
       transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     }
     .btn-search::before {
@@ -342,6 +342,11 @@
     .student-seat { font-family:'Space Mono',monospace; font-size:0.77rem; color:var(--muted); }
 
     .stats-grid { display:flex; flex-direction:column; gap:8px; }
+    .module-ranks-label {
+      font-family:'Space Mono',monospace; font-size:0.64rem;
+      letter-spacing:1.5px; color:var(--muted); text-transform:uppercase;
+      margin:4px 0 2px; font-weight:600;
+    }
     .stat-row {
       display:flex; justify-content:space-between; align-items:center;
       padding:13px 15px; background:var(--bg);
@@ -457,9 +462,9 @@
       .back-btn:hover i { transform:translateX(-4px); }
       
       .btn-search:hover:not(:disabled) { 
-        background:var(--blue-dark); 
+        background:var(--teal-dark); 
         transform:translateY(-3px) scale(1.02); 
-        box-shadow:0 16px 32px rgba(41,82,217,0.35); 
+        box-shadow:0 16px 32px rgba(14,156,134,0.35); 
       }
       .btn-search:hover:not(:disabled)::before { left:130%; }
       
@@ -691,6 +696,52 @@
                   <div class="stat-row">
                     <span class="stat-label"><i class="fas fa-percent"></i> Percentage</span>
                     <span class="stat-val" id="res-percent">&mdash;</span>
+                  </div>
+                </div>
+
+                <!-- Module ranks — 1st Year only -->
+                <div class="stats-grid" id="module-ranks-y1" style="display:none; margin-top:8px;">
+                  <div class="module-ranks-label">Module Ranks</div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-seedling"></i> Foundation</span>
+                    <span class="stat-val" id="res-rank-foundation">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-droplet"></i> Blood &amp; Immune</span>
+                    <span class="stat-val" id="res-rank-blood">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-bone"></i> Musculoskeletal</span>
+                    <span class="stat-val" id="res-rank-msk">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-lungs"></i> Cardiopulmonary</span>
+                    <span class="stat-val" id="res-rank-cardio">#&mdash;</span>
+                  </div>
+                </div>
+
+                <!-- Module ranks — 2nd Year Grade only -->
+                <div class="stats-grid" id="module-ranks-y2nd" style="display:none; margin-top:8px;">
+                  <div class="module-ranks-label">Module Ranks</div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-flask"></i> Endocrine, Urinary &amp; Repro</span>
+                    <span class="stat-val" id="res-rank-eur">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-utensils"></i> GIT</span>
+                    <span class="stat-val" id="res-rank-git">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-brain"></i> CNS</span>
+                    <span class="stat-val" id="res-rank-cns">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-layer-group"></i> Concept 1</span>
+                    <span class="stat-val" id="res-rank-concept1">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-cubes-stacked"></i> Concept 2</span>
+                    <span class="stat-val" id="res-rank-concept2">#&mdash;</span>
                   </div>
                 </div>
               </div>
@@ -976,6 +1027,27 @@
     const circle = document.getElementById('grade-circle');
     circle.className = 'grade-circle ' + grade.cls;
     circle.innerText = grade.label;
+
+    /* ── Module ranks (per-mode) ── */
+    const y1Box   = document.getElementById('module-ranks-y1');
+    const y2ndBox = document.getElementById('module-ranks-y2nd');
+    y1Box.style.display   = 'none';
+    y2ndBox.style.display = 'none';
+
+    if (currentMode === 'y1') {
+      document.getElementById('res-rank-foundation').innerText = '#' + (data.rankFoundation || '—');
+      document.getElementById('res-rank-blood').innerText      = '#' + (data.rankBlood      || '—');
+      document.getElementById('res-rank-msk').innerText        = '#' + (data.rankMSK         || '—');
+      document.getElementById('res-rank-cardio').innerText     = '#' + (data.rankCardio      || '—');
+      y1Box.style.display = 'flex';
+    } else if (currentMode === 'y2nd') {
+      document.getElementById('res-rank-eur').innerText      = '#' + (data.rankEUR      || '—');
+      document.getElementById('res-rank-git').innerText      = '#' + (data.rankGIT      || '—');
+      document.getElementById('res-rank-cns').innerText      = '#' + (data.rankCNS      || '—');
+      document.getElementById('res-rank-concept1').innerText = '#' + (data.rankConcept1 || '—');
+      document.getElementById('res-rank-concept2').innerText = '#' + (data.rankConcept2 || '—');
+      y2ndBox.style.display = 'flex';
+    }
 
     document.getElementById('result-area').style.display = 'block';
     if (data.stats) {
