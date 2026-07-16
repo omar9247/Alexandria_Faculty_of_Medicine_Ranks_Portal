@@ -44,8 +44,9 @@
       position:relative;
       width:100vw;
       height:100vh;
-      height:100dvh; 
+      height:100dvh; /* accounts for mobile browser chrome */
       overflow:hidden;
+      /* Background moved here for perfect mobile aspect ratio scaling */
       background-image:linear-gradient(180deg, rgba(8,14,26,0.62) 0%, rgba(8,14,26,0.40) 38%, rgba(8,14,26,0.55) 75%, rgba(8,14,26,0.72) 100%), url('background.jpg');
       background-size:cover; 
       background-position:center;
@@ -60,16 +61,20 @@
       overflow-x:hidden;
       -webkit-overflow-scrolling:touch;
       z-index:1;
-      background:transparent; 
+      background:transparent; /* Allows the #app background to shine through perfectly */
       transition:transform 0.55s cubic-bezier(0.77,0,0.18,1),
                   opacity   0.55s cubic-bezier(0.77,0,0.18,1);
       will-change:transform;
     }
 
-    #page-landing { transform:translateX(0); opacity:1; }
-    #page-results { transform:translateX(100%); opacity:0; pointer-events:none; }
-    #page-landing.hidden { transform:translateX(-100%); opacity:0; pointer-events:none; }
-    #page-results.visible { transform:translateX(0); opacity:1; pointer-events:all; }
+    #page-landing {
+      transform:translateX(0); opacity:1;
+    }
+    #page-results  {
+      transform:translateX(100%); opacity:0; pointer-events:none;
+    }
+    #page-landing.hidden  { transform:translateX(-100%); opacity:0; pointer-events:none; }
+    #page-results.visible { transform:translateX(0);     opacity:1; pointer-events:all; }
 
     /* ── TOP HEADER ── */
     .site-header {
@@ -107,86 +112,223 @@
     .contact-chip:active { transform:scale(0.95); }
     .contact-chip i { color:var(--blue); font-size:0.82rem; transition:color 0.3s ease; }
 
+    /* Transparent header */
     .site-header.header-overlay {
       position:absolute; top:0; left:0; width:100%;
       background:transparent; border-bottom:none; z-index:10;
     }
-    .header-overlay .crest-badge { background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4); backdrop-filter:blur(8px); box-shadow:none; }
+    .header-overlay .crest-badge {
+      background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.4);
+      backdrop-filter:blur(8px); box-shadow:none;
+    }
     .header-overlay .brand-text .b-title { color:#fff; text-shadow:0 1px 8px rgba(0,0,0,0.35); }
     .header-overlay .brand-text .b-sub   { color:#e2e8f7; text-shadow:0 1px 8px rgba(0,0,0,0.35); }
-    .header-overlay .contact-chip { background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.4); color:#fff; backdrop-filter:blur(8px); }
+    .header-overlay .contact-chip {
+      background:rgba(255,255,255,0.12); border-color:rgba(255,255,255,0.4); color:#fff;
+      backdrop-filter:blur(8px);
+    }
     .header-overlay .contact-chip i { color:#fff; }
 
-    .page-inner { min-height:100%; display:flex; flex-direction:column; align-items:center; gap:0; }
+    /* ── PAGE INNER SCROLL CONTAINERS ── */
+    .page-inner {
+      min-height:100%;
+      display:flex; flex-direction:column; align-items:center;
+      gap:0;
+    }
 
+    /* ── HERO ── */
     .hero {
-      width:100%; position:relative; min-height:78vh;
+      width:100%; position:relative;
+      min-height:78vh;
       display:flex; align-items:center; justify-content:center;
       padding:120px 20px 60px;
     }
     .hero-inner { width:100%; max-width:640px; margin:0 auto; text-align:center; animation:fadeDown 0.7s ease both; position:relative; z-index:1; }
-    .hero-title { font-family:'Source Serif 4',serif; font-weight:600; font-size:clamp(1.8rem,6vw,3rem); color:#fff; line-height:1.28; text-shadow:0 2px 18px rgba(0,0,0,0.35); }
-    .hero-rule { width:60px; height:3px; margin:20px auto 0; border-radius:2px; background:linear-gradient(90deg,var(--blue),var(--teal)); }
-    .hero-scroll-cue { position:absolute; left:50%; bottom:26px; transform:translateX(-50%); color:#fff; opacity:0.75; font-size:1.1rem; z-index:1; animation:bounce 1.8s ease-in-out infinite; }
+    .hero-eyebrow {
+      font-family:'Space Mono',monospace; font-size:0.68rem;
+      letter-spacing:3px; color:#cfe0ff; text-transform:uppercase;
+      margin-bottom:12px;
+    }
+    .hero-title {
+      font-family:'Source Serif 4',serif; font-weight:600;
+      font-size:clamp(1.8rem,6vw,3rem); color:#fff; line-height:1.28;
+      text-shadow:0 2px 18px rgba(0,0,0,0.35);
+    }
+    .hero-rule {
+      width:60px; height:3px; margin:20px auto 0; border-radius:2px;
+      background:linear-gradient(90deg,var(--blue),var(--teal));
+    }
+    .hero-scroll-cue {
+      position:absolute; left:50%; bottom:26px; transform:translateX(-50%);
+      color:#fff; opacity:0.75; font-size:1.1rem; z-index:1;
+      animation:bounce 1.8s ease-in-out infinite;
+    }
     @keyframes bounce { 0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,8px);} }
 
-    .select-wrap { width:100%; max-width:640px; margin:0 auto; padding:10px 20px 90px; position:relative; z-index:1; }
-    .select-label { font-family:'Inter',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:2.5px; color:#eef2fb; text-transform:uppercase; display:flex; align-items:center; gap:10px; margin-bottom:18px; text-shadow:0 1px 10px rgba(0,0,0,0.4); }
+    /* ── SELECTION AREA ── */
+    .select-wrap {
+      width:100%; max-width:640px; margin:0 auto;
+      padding:10px 20px 90px;
+      position:relative; z-index:1;
+    }
+    .select-label {
+      font-family:'Inter',sans-serif; font-weight:700; font-size:0.7rem;
+      letter-spacing:2.5px; color:#eef2fb; text-transform:uppercase;
+      display:flex; align-items:center; gap:10px; margin-bottom:18px;
+      text-shadow:0 1px 10px rgba(0,0,0,0.4);
+    }
     .select-label::before { content:''; width:20px; height:2px; background:var(--teal); border-radius:2px; }
+    .select-label i { color:#fff; }
 
-    .nav-card { width:100%; background:var(--white); border:1px solid rgba(255,255,255,0.5); border-radius:14px; box-shadow:0 24px 60px rgba(4,8,18,0.4); overflow:visible; animation:fadeDown 0.7s 0.1s ease both; }
+    .nav-card {
+      width:100%; background:var(--white);
+      border:1px solid rgba(255,255,255,0.5); border-radius:14px;
+      box-shadow:0 24px 60px rgba(4,8,18,0.4); overflow:visible;
+      animation:fadeDown 0.7s 0.1s ease both;
+    }
     .nav-list { padding:12px; display:flex; flex-direction:column; gap:6px; }
-    .nav-btn { width:100%; display:flex; align-items:center; gap:14px; padding:16px 14px; border-radius:10px; background:transparent; border:1px solid transparent; color:var(--ink); font-family:'Inter',sans-serif; font-size:0.98rem; font-weight:700; cursor:pointer; text-align:left; position:relative; overflow:hidden; min-height:48px; transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+
+    .nav-btn {
+      width:100%; display:flex; align-items:center; gap:14px;
+      padding:16px 14px; border-radius:10px;
+      background:transparent; border:1px solid transparent;
+      color:var(--ink); font-family:'Inter',sans-serif;
+      font-size:0.98rem; font-weight:700; cursor:pointer; text-align:left;
+      position:relative; overflow:hidden; min-height:48px;
+      transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
     .nav-btn:active { transform:scale(0.97); }
-    .nav-icon { width:42px; height:42px; border-radius:9px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1rem; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+
+    .nav-icon {
+      width:42px; height:42px; border-radius:9px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1rem;
+      transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
     .icon-green { background:var(--teal-soft); color:var(--teal-dark); }
     .icon-blue  { background:var(--blue-soft); color:var(--blue-dark); }
+    .icon-purple{ background:#f2eafc; color:#7c3aed; }
+
     .nav-text { flex:1; }
-    .nav-text small { display:block; font-family:'Inter',sans-serif; font-size:0.66rem; letter-spacing:0.6px; color:var(--muted); margin-top:3px; font-weight:600; }
+    .nav-text small {
+      display:block; font-family:'Inter',sans-serif;
+      font-size:0.66rem; letter-spacing:0.6px; color:var(--muted);
+      margin-top:3px; font-weight:600;
+    }
     .nav-arrow { font-size:0.78rem; color:var(--faint); transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1), color 0.3s ease; }
     .arrow-down.open { transform:rotate(180deg); color:var(--blue); }
 
     .nav-sub { display:none; flex-direction:column; gap:5px; padding:0 10px 8px 10px; }
     .nav-sub.open { display:flex; animation:fadeDown 0.35s ease both; }
-    .nav-sub-btn { width:100%; display:flex; align-items:center; gap:12px; padding:13px 14px 13px 24px; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--ink); font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:600; cursor:pointer; text-align:left; position:relative; overflow:hidden; min-height:46px; transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+    .nav-sub-btn {
+      width:100%; display:flex; align-items:center; gap:12px;
+      padding:13px 14px 13px 24px; background:var(--bg);
+      border:1px solid var(--border); border-radius:8px;
+      color:var(--ink); font-family:'Inter',sans-serif;
+      font-size:0.9rem; font-weight:600; cursor:pointer; text-align:left;
+      position:relative; overflow:hidden; min-height:46px;
+      transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
     .nav-sub-btn:active { transform:scale(0.97); }
-    
+    .nav-sub-btn i { font-size:0.82rem; color:var(--blue); transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+
+    /* ── RESULTS PAGE ── */
     #page-results .page-inner { padding:0; align-items:stretch; }
     .results-shell { width:100%; max-width:1040px; margin:0 auto; padding:110px 20px 70px; }
-    .results-topbar { display:flex; align-items:center; gap:16px; margin-bottom:22px; flex-wrap:wrap; }
-    .back-btn { display:flex; align-items:center; gap:8px; padding:11px 18px; border-radius:9px; border:1px solid var(--border); background:var(--white); color:var(--muted); font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer; flex-shrink:0; box-shadow:0 14px 30px rgba(4,8,18,0.28); position:relative; overflow:hidden; min-height:44px; transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+
+    .results-topbar {
+      display:flex; align-items:center; gap:16px; margin-bottom:22px; flex-wrap:wrap;
+    }
+    .back-btn {
+      display:flex; align-items:center; gap:8px;
+      padding:11px 18px; border-radius:9px;
+      border:1px solid var(--border); background:var(--white);
+      color:var(--muted); font-family:'Inter',sans-serif; font-size:0.88rem; font-weight:700;
+      cursor:pointer; flex-shrink:0; box-shadow:0 14px 30px rgba(4,8,18,0.28);
+      position:relative; overflow:hidden; min-height:44px;
+      transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
     .back-btn:active { transform:scale(0.95); }
+    .back-btn i { transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
     .results-title h2 { font-family:'Source Serif 4',serif; font-size:1.35rem; font-weight:600; color:#fff; line-height:1.2; text-shadow:0 1px 10px rgba(0,0,0,0.4); }
     .results-title span { font-family:'Inter',sans-serif; font-weight:700; font-size:0.68rem; letter-spacing:1px; color:#e2e8f7; text-transform:uppercase; text-shadow:0 1px 8px rgba(0,0,0,0.4); }
 
     .results-grid { display:grid; grid-template-columns:1.05fr 1fr; gap:22px; align-items:stretch; }
     @media (max-width:880px) { .results-grid { grid-template-columns:1fr; } }
 
-    .card { background:var(--white); border:1px solid rgba(255,255,255,0.5); border-radius:14px; box-shadow:0 24px 56px rgba(4,8,18,0.35); overflow:hidden; transition:all 0.4s ease; display:flex; flex-direction:column; }
-    .card > .card-top { flex:0 0 auto; padding:24px 24px 0; }
-    .card > .card-body-inner { flex:1 1 auto; display:flex; flex-direction:column; padding:0 24px 24px; }
+    .card {
+      background:var(--white); border:1px solid rgba(255,255,255,0.5);
+      border-radius:14px; box-shadow:0 24px 56px rgba(4,8,18,0.35); overflow:hidden;
+      transition:all 0.4s ease;
+      display:flex; flex-direction:column;
+    }
+    .card > .card-top { flex:0 0 auto; }
+    .card > .card-body-inner { flex:1 1 auto; display:flex; flex-direction:column; }
     .results-grid > .card > .card-body-inner { justify-content:flex-start; }
+    .card-top { padding:24px 24px 0; }
+    .card-body-inner { padding:0 24px 24px; }
 
-    .section-label { font-family:'Inter',sans-serif; font-weight:700; font-size:0.72rem; letter-spacing:1.2px; color:var(--muted); text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .section-label {
+      font-family:'Inter',sans-serif; font-weight:700; font-size:0.72rem;
+      letter-spacing:1.2px; color:var(--muted); text-transform:uppercase;
+      margin-bottom:16px; display:flex; align-items:center; gap:8px;
+    }
     .section-label::before { content:''; width:16px; height:2px; background:var(--blue); border-radius:2px; flex-shrink:0; }
     .section-label i { color:var(--blue); font-size:0.72rem; }
 
     .input-wrap { position:relative; margin-bottom:13px; }
     .input-wrap > i { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:var(--faint); }
-    .seat-input { width:100%; padding:15px 16px 15px 42px; min-height:48px; background:var(--bg); border:1.5px solid var(--border); border-radius:9px; color:var(--ink); font-family:'Space Mono',monospace; font-size:1.05rem; letter-spacing:2px; outline:none; transition:border-color 0.2s, background 0.2s; }
+    .seat-input {
+      width:100%; padding:15px 16px 15px 42px; min-height:48px;
+      background:var(--bg); border:1.5px solid var(--border); border-radius:9px;
+      color:var(--ink); font-family:'Space Mono',monospace;
+      font-size:1.05rem; letter-spacing:2px; outline:none;
+      transition:border-color 0.2s, background 0.2s;
+    }
+    .seat-input::placeholder { color:var(--faint); letter-spacing:1px; }
     .seat-input:focus { border-color:var(--blue); background:var(--white); box-shadow:0 0 0 4px var(--blue-soft); }
 
-    .btn-search { width:100%; padding:15px; border-radius:9px; border:none; background:var(--teal-dark); color:#fff; font-family:'Inter',sans-serif; font-size:0.93rem; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; cursor:pointer; position:relative; overflow:hidden; box-shadow:0 10px 22px rgba(14,156,134,0.25); transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1); min-height:48px; }
+    .btn-search {
+      width:100%; padding:15px; border-radius:9px; border:none;
+      background:var(--teal-dark); color:#fff;
+      font-family:'Inter',sans-serif; font-size:0.93rem; font-weight:700;
+      letter-spacing:0.4px; text-transform:uppercase; cursor:pointer;
+      position:relative; overflow:hidden;
+      box-shadow:0 10px 22px rgba(14,156,134,0.25);
+      transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      min-height:48px;
+    }
+    .btn-search::before {
+      content:''; position:absolute; top:0; left:-75%; width:45%; height:100%;
+      background:linear-gradient(115deg, transparent, rgba(255,255,255,0.32), transparent);
+      transform:skewX(-18deg); pointer-events:none;
+      transition:left 0.7s cubic-bezier(0.25,1,0.5,1);
+    }
     .btn-search:active { transform:scale(0.96); }
     .btn-search:disabled { opacity:0.55; cursor:not-allowed; transform:none; }
 
-    .loader { display:none; width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; margin:20px auto 0; }
-    .error-msg { display:none; margin-top:16px; padding:12px 16px; background:#fdecec; border:1px solid #f6c6c6; border-radius:8px; color:#b23434; font-size:0.87rem; text-align:center; font-weight:600; }
+    .loader {
+      display:none; width:32px; height:32px;
+      border:3px solid var(--border); border-top-color:var(--blue);
+      border-radius:50%; animation:spin 0.8s linear infinite; margin:20px auto 0;
+    }
+    .error-msg {
+      display:none; margin-top:16px; padding:12px 16px;
+      background:#fdecec; border:1px solid #f6c6c6;
+      border-radius:8px; color:#b23434; font-size:0.87rem; text-align:center; font-weight:600;
+    }
     .result-area { display:none; margin-top:20px; animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
     .divider { height:1px; background:var(--border); margin:16px 0; }
 
     .grade-wrap { display:flex; flex-direction:column; align-items:center; margin-bottom:18px; }
-    .grade-circle { width:92px; height:92px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Space Mono',monospace; font-size:0.78rem; font-weight:700; letter-spacing:0.4px; color:#fff; margin-bottom:12px; text-align:center; line-height:1.25; padding:8px; box-shadow:0 12px 26px rgba(24,34,56,0.18); }
+    .grade-circle {
+      width:92px; height:92px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Space Mono',monospace; font-size:0.78rem; font-weight:700;
+      letter-spacing:0.4px; color:#fff; margin-bottom:12px;
+      text-align:center; line-height:1.25; padding:8px;
+      box-shadow:0 12px 26px rgba(24,34,56,0.18);
+    }
     .grade-label { font-family:'Source Serif 4',serif; font-weight:600; font-size:1.15rem; color:var(--ink); }
 
     .bg-Excellent { background:var(--em); }
@@ -196,28 +338,60 @@
     .bg-Fail      { background:var(--gar); }
     .bg-Default   { background:var(--slt); }
 
-    .student-info { background:var(--bg); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:8px; padding:14px 18px; margin-bottom:12px; }
+    .student-info {
+      background:var(--bg); border:1px solid var(--border);
+      border-left:3px solid var(--blue);
+      border-radius:8px; padding:14px 18px; margin-bottom:12px;
+    }
     .student-name { font-family:'Source Serif 4',serif; font-size:1.1rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
     .student-seat { font-family:'Space Mono',monospace; font-size:0.77rem; color:var(--muted); }
 
     .stats-grid { display:flex; flex-direction:column; gap:8px; }
-    .module-ranks-label { font-family:'Inter',sans-serif; font-size:0.68rem; letter-spacing:0.8px; color:var(--muted); text-transform:uppercase; margin:4px 0 2px; font-weight:700; }
-    .stat-row { display:flex; justify-content:space-between; align-items:center; padding:13px 15px; background:var(--bg); border:1px solid var(--border); border-radius:8px; }
+    .module-ranks-label {
+      font-family:'Inter',sans-serif; font-size:0.68rem;
+      letter-spacing:0.8px; color:var(--muted); text-transform:uppercase;
+      margin:4px 0 2px; font-weight:700;
+    }
+    .stat-row {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:13px 15px; background:var(--bg);
+      border:1px solid var(--border); border-radius:8px;
+    }
     .stat-label { color:var(--muted); font-size:0.87rem; font-weight:600; display:flex; align-items:center; gap:7px; }
     .stat-label i { font-size:0.78rem; color:var(--blue); }
     .stat-val { font-weight:700; font-size:0.95rem; color:var(--ink); font-family:'Space Mono',monospace; }
 
+    /* ── STATS PANEL (class-wide) ── */
     .stats-panel { animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
     .stats-card { padding:24px; }
-    .stats-section-label { font-family:'Inter',sans-serif; font-weight:700; font-size:0.72rem; letter-spacing:1.2px; color:var(--muted); text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+
+    .stats-section-label {
+      font-family:'Inter',sans-serif; font-weight:700; font-size:0.72rem;
+      letter-spacing:1.2px; color:var(--muted); text-transform:uppercase;
+      margin-bottom:14px; display:flex; align-items:center; gap:8px;
+    }
     .stats-section-label::before { content:''; width:14px; height:2px; background:var(--teal); border-radius:2px; }
-    
+    .stats-section-label i { color:var(--teal); font-size:0.7rem; }
+
     .key-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:24px; }
-    .key-stat-box { background:var(--bg); border:1px solid var(--border); border-top:3px solid var(--teal); border-radius:10px; padding:16px 10px; text-align:center; transition:all 0.4s; }
-    .key-stat-val { font-family:'Space Mono',monospace; font-size:1.15rem; font-weight:700; color:var(--ink); margin-bottom:5px; line-height:1.2; }
+    .key-stat-box {
+      background:var(--bg); border:1px solid var(--border);
+      border-top:3px solid var(--teal);
+      border-radius:10px; padding:16px 10px; text-align:center;
+      position:relative; overflow:hidden;
+      transition:all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .key-stat-val {
+      font-family:'Space Mono',monospace; font-size:1.15rem; font-weight:700;
+      color:var(--ink); margin-bottom:5px; line-height:1.2;
+    }
     .key-stat-lbl { font-size:0.72rem; color:var(--muted); line-height:1.3; font-weight:600; }
 
-    .shimmer { background:linear-gradient(90deg, #e9edf5 25%, #f6f8fc 50%, #e9edf5 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:6px; color:transparent !important; pointer-events:none; }
+    .shimmer {
+      background:linear-gradient(90deg, #e9edf5 25%, #f6f8fc 50%, #e9edf5 75%);
+      background-size:200% 100%; animation:shimmer 1.4s infinite;
+      border-radius:6px; color:transparent !important; pointer-events:none;
+    }
     @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
     .dist-chart { display:flex; flex-direction:column; gap:10px; }
@@ -235,26 +409,149 @@
 
     .stats-note { font-size:0.74rem; color:var(--muted); text-align:center; margin-top:16px; font-family:'Space Mono',monospace; }
 
-    .site-footer { color:var(--faint); font-size:0.72rem; font-family:'Space Mono',monospace; text-align:center; padding:30px 20px 10px; }
-    .site-footer.footer-on-photo { color:rgba(255,255,255,0.92); font-weight:700; text-shadow:0 1px 8px rgba(0,0,0,0.5); position:relative; z-index:1; margin-top:14px; padding:14px 20px calc(14px + env(safe-area-inset-bottom)); background:linear-gradient(180deg, rgba(4,8,18,0) 0%, rgba(4,8,18,0.55) 55%, rgba(4,8,18,0.75) 100%); }
+    .site-footer {
+      color:var(--faint); font-size:0.72rem; font-family:'Space Mono',monospace;
+      letter-spacing:0.5px; text-align:center; padding:30px 20px 10px;
+    }
+    .site-footer.footer-on-photo {
+      color:rgba(255,255,255,0.92); font-weight:700; text-shadow:0 1px 8px rgba(0,0,0,0.5);
+      position:relative; z-index:1;
+      margin-top:14px; padding:14px 20px calc(14px + env(safe-area-inset-bottom));
+      background:linear-gradient(180deg, rgba(4,8,18,0) 0%, rgba(4,8,18,0.55) 55%, rgba(4,8,18,0.75) 100%);
+    }
 
     @keyframes fadeDown { from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:translateY(0)} }
     @keyframes slideUp  { from{opacity:0;transform:translateY(18px)}  to{opacity:1;transform:translateY(0)} }
     @keyframes spin     { to{transform:rotate(360deg)} }
     @keyframes shake    { 0%,100%{transform:translateX(0)} 25%,75%{transform:translateX(-6px)} 50%{transform:translateX(6px)} }
 
+    /* ── RIPPLE (click/tap feedback) ── */
+    .ripple-el {
+      position:absolute; border-radius:50%; pointer-events:none;
+      background:rgba(255,255,255,0.55); mix-blend-mode:overlay;
+      transform:translate(-50%,-50%) scale(0);
+      animation:rippleAnim 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+      z-index:0;
+    }
+    @keyframes rippleAnim { to { transform:translate(-50%,-50%) scale(1); opacity:0; } }
+
+    /* ── HOVER MICRO-INTERACTIONS ──
+       Enhanced for professional, elegant scaling and shadow reveals */
     @media (hover:hover) and (pointer:fine) {
-      .nav-btn:hover { background:var(--white); border-color:var(--blue); transform:translateY(-4px) scale(1.02); box-shadow:0 16px 32px rgba(41,82,217,0.15); }
-      .btn-search:hover:not(:disabled) { background:var(--teal-darker); transform:translateY(-3px) scale(1.02); }
+      .nav-btn:hover { 
+        background:var(--white); 
+        border-color:var(--blue); 
+        transform:translateY(-4px) scale(1.02); 
+        box-shadow:0 16px 32px rgba(41,82,217,0.15); 
+      }
+      .nav-btn:hover .nav-icon { transform:scale(1.15) rotate(-6deg); }
+      .nav-btn:hover .nav-arrow { color:var(--blue); transform:translateX(6px); }
+      
+      .nav-sub-btn:hover { 
+        background:var(--blue-soft); 
+        border-color:var(--blue); 
+        color:var(--blue-dark); 
+        transform:translateX(4px) scale(1.01); 
+      }
+      .nav-sub-btn:hover i { transform:scale(1.2); }
+      
+      .contact-chip:hover { 
+        transform:translateY(-3px) scale(1.05); 
+        box-shadow:0 8px 20px rgba(0,0,0,0.2); 
+      }
+      .header-overlay .contact-chip:hover { box-shadow:0 8px 20px rgba(0,0,0,0.35); }
+      
+      .back-btn:hover { 
+        border-color:var(--blue); color:var(--blue); 
+        transform:translateY(-3px) scale(1.02); 
+        box-shadow:0 12px 24px rgba(41,82,217,0.15); 
+      }
+      .back-btn:hover i { transform:translateX(-4px); }
+      
+      .btn-search:hover:not(:disabled) { 
+        background:var(--teal-darker); 
+        transform:translateY(-3px) scale(1.02); 
+        box-shadow:0 16px 32px rgba(14,156,134,0.35); 
+      }
+      .btn-search:hover:not(:disabled)::before { left:130%; }
+      
+      .key-stat-box:hover { 
+        border-color:var(--teal); 
+        transform:translateY(-4px) scale(1.03); 
+        box-shadow:0 12px 24px rgba(14,156,134,0.15);
+      }
       .card:hover { box-shadow:0 28px 64px rgba(4,8,18,0.4); }
+    }
+
+    /* ── REDUCED MOTION ── */
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after {
+        animation-duration:0.001ms !important; animation-iteration-count:1 !important;
+        transition-duration:0.001ms !important; scroll-behavior:auto !important;
+      }
+    }
+
+    /* ── TABLET / iPad (portrait & landscape) ── */
+    @media (min-width:641px) and (max-width:1024px) {
+      .hero { min-height:52vh; padding:112px 40px 40px; }
+      .select-wrap { max-width:600px; }
+      .results-shell { padding:110px 32px 70px; }
+    }
+
+    /* ── LANDSCAPE PHONES (short viewport height) ── */
+    @media (max-height:500px) and (orientation:landscape) {
+      .hero { min-height:auto; padding:84px 24px 24px; }
+      .hero-scroll-cue { display:none; }
+      .site-header { padding:10px 20px; }
+      .results-shell { padding:90px 20px 40px; }
+    }
+
+    /* ── SMALL PHONES ── */
+    @media(max-width:480px) {
+      .card-top, .card-body-inner { padding-left:18px; padding-right:18px; }
+      .site-header { padding:14px 16px; }
+      .hero { min-height:64vh; padding:100px 16px 40px; }
+      .nav-btn { padding:14px 12px; gap:12px; }
+      .nav-icon { width:38px; height:38px; font-size:0.92rem; }
+      .contact-chip { padding:7px 12px; font-size:0.78rem; }
+
+      /* Stack distribution label above the bar so the bar gets full width */
+      .dist-row {
+        flex-wrap:wrap; row-gap:4px;
+      }
+      .dist-label {
+        order:1; width:auto; text-align:left; flex:1 1 auto;
+      }
+      .dist-count { order:2; }
+      .dist-bar-wrap { order:3; flex:1 1 100%; }
+    }
+
+    /* ── VERY NARROW PHONES (e.g. older/small-screen devices) ── */
+    @media(max-width:360px) {
+      .hero-title { font-size:clamp(1.5rem,7vw,1.9rem); }
+      .contact-row { gap:6px; }
+      .contact-chip span, .b-sub { letter-spacing:1px; }
+      .key-stats { grid-template-columns:1fr 1fr; }
+      .key-stats .key-stat-box:last-child { grid-column:span 2; }
+    }
+
+    /* Safe-area padding for notched/gesture-bar phones, all breakpoints */
+    .page-inner { padding-bottom:env(safe-area-inset-bottom); }
+    .site-header.header-overlay {
+      padding-left:max(28px, env(safe-area-inset-left));
+      padding-right:max(28px, env(safe-area-inset-right));
     }
   </style>
 </head>
 <body>
 
 <div id="app">
-  <!-- PAGE 1 — LANDING -->
+
+  <!-- ═══════════════════════════
+       PAGE 1 — LANDING
+  ═══════════════════════════ -->
   <div id="page-landing" class="page">
+
     <div class="site-header header-overlay">
       <div class="brand">
         <div class="crest-badge"><i class="fas fa-chart-line"></i></div>
@@ -264,12 +561,18 @@
         </div>
       </div>
       <div class="contact-row">
-        <a class="contact-chip" href="https://t.me/OmarAboolo" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
-        <a class="contact-chip" href="mailto:omaraboolo924@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+        <a class="contact-chip" href="https://t.me/OmarAboolo" target="_blank">
+          <i class="fab fa-telegram"></i> Telegram
+        </a>
+        <a class="contact-chip" href="mailto:omaraboolo924@gmail.com">
+          <i class="fas fa-envelope"></i> Email
+        </a>
       </div>
     </div>
 
     <div class="page-inner">
+
+      <!-- Hero text layout -->
       <div class="hero">
         <div class="hero-inner">
           <div class="hero-title">Check Your Results</div>
@@ -278,37 +581,59 @@
         <div class="hero-scroll-cue"><i class="fas fa-chevron-down"></i></div>
       </div>
 
+      <!-- Selection area -->
       <div class="select-wrap">
         <div class="select-label"><i class="fas fa-list-check" style="color:var(--blue);"></i>&nbsp; Select Academic Year</div>
+
         <div class="nav-card">
           <div class="nav-list">
+
+            <!-- 1st Year -->
             <div>
               <button class="nav-btn" onclick="goToResults('y1')">
                 <span class="nav-icon icon-green"><i class="fas fa-medal"></i></span>
-                <span class="nav-text">1st Year<small>CLASS OF 2030 &middot; RANK</small></span>
+                <span class="nav-text">
+                  1st Year
+                  <small>CLASS OF 2030 &middot; RANK</small>
+                </span>
                 <i class="fas fa-chevron-right nav-arrow arrow-right"></i>
               </button>
             </div>
+
+            <!-- 2nd Year — expandable -->
             <div>
               <button class="nav-btn" onclick="toggleSub('y2-sub','y2-arrow')">
                 <span class="nav-icon icon-blue"><i class="fas fa-graduation-cap"></i></span>
-                <span class="nav-text">2nd Year<small>CLASS OF 2029 &middot; TWO MODES</small></span>
+                <span class="nav-text">
+                  2nd Year
+                  <small>CLASS OF 2029 &middot; TWO MODES</small>
+                </span>
                 <i class="fas fa-chevron-down nav-arrow arrow-down" id="y2-arrow"></i>
               </button>
               <div class="nav-sub" id="y2-sub">
-                <button class="nav-sub-btn" onclick="goToResults('accum')"><i class="fas fa-chart-line"></i> Accumulative Grade</button>
-                <button class="nav-sub-btn" onclick="goToResults('y2nd')"><i class="fas fa-calendar-check"></i> 2nd Year Grade</button>
+                <button class="nav-sub-btn" onclick="goToResults('accum')">
+                  <i class="fas fa-chart-line"></i> Accumulative Grade
+                </button>
+                <button class="nav-sub-btn" onclick="goToResults('y2nd')">
+                  <i class="fas fa-calendar-check"></i> 2nd Year Grade
+                </button>
               </div>
             </div>
+
           </div>
         </div>
       </div>
+
       <footer class="site-footer footer-on-photo">&copy; Made by Omar Aboolo &middot; Class of 2030</footer>
     </div>
   </div>
 
-  <!-- PAGE 2 — RESULTS -->
+
+  <!-- ═══════════════════════════
+       PAGE 2 — RESULTS
+  ═══════════════════════════ -->
   <div id="page-results" class="page">
+
     <div class="site-header header-overlay">
       <div class="brand">
         <div class="crest-badge"><i class="fas fa-chart-line"></i></div>
@@ -317,12 +642,23 @@
           <div class="b-sub">Student Results &amp; Rankings</div>
         </div>
       </div>
+      <div class="contact-row">
+        <a class="contact-chip" href="https://t.me/OmarAboolo" target="_blank">
+          <i class="fab fa-telegram"></i> Telegram
+        </a>
+        <a class="contact-chip" href="mailto:omaraboolo924@gmail.com">
+          <i class="fas fa-envelope"></i> Email
+        </a>
+      </div>
     </div>
 
     <div class="page-inner">
       <div class="results-shell">
+
         <div class="results-topbar">
-          <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
           <div class="results-title">
             <h2 id="results-heading">Results</h2>
             <span id="results-subheading">&mdash;</span>
@@ -330,6 +666,7 @@
         </div>
 
         <div class="results-grid">
+
           <!-- LEFT: search + individual result -->
           <div class="card">
             <div class="card-top">
@@ -343,10 +680,14 @@
               </div>
             </div>
             <div class="card-body-inner">
-              <button class="btn-search" id="search-btn" onclick="doSearch()"><i class="fas fa-search" style="margin-right:8px;"></i>Search Results</button>
+              <button class="btn-search" id="search-btn" onclick="doSearch()">
+                <i class="fas fa-search" style="margin-right:8px;"></i>Search Results
+              </button>
               <div class="loader" id="loader"></div>
-              <div class="error-msg" id="error-msg"><i class="fas fa-triangle-exclamation" style="margin-right:6px;"></i>Seat number not found. Please try again.</div>
-              
+              <div class="error-msg" id="error-msg">
+                <i class="fas fa-triangle-exclamation" style="margin-right:6px;"></i>
+                Seat number not found. Please try again.
+              </div>
               <div class="result-area" id="result-area">
                 <div class="divider"></div>
                 <div class="grade-wrap">
@@ -366,7 +707,7 @@
                     <span class="stat-val" id="res-rank">#&mdash;</span>
                   </div>
                   <div class="stat-row">
-                    <span class="stat-label"><i class="fas fa-sigma"></i> Total Grade</span>
+                    <span class="stat-label"><i class="fas fa-sigma"></i> Total Score</span>
                     <span class="stat-val" id="res-total">&mdash;</span>
                   </div>
                   <div class="stat-row">
@@ -375,9 +716,9 @@
                   </div>
                 </div>
 
-                <!-- Module ranks — 1st Year only mapped correctly to Excel sheet -->
+                <!-- Module ranks — 1st Year only -->
                 <div class="stats-grid" id="module-ranks-y1" style="display:none; margin-top:8px;">
-                  <div class="module-ranks-label">Module Grades & Ranks</div>
+                  <div class="module-ranks-label">Module Ranks &amp; Grades</div>
                   <div class="stat-row">
                     <span class="stat-label"><i class="fas fa-seedling"></i> Foundation</span>
                     <span class="stat-val" id="res-rank-foundation">#&mdash;</span>
@@ -388,14 +729,29 @@
                   </div>
                 </div>
 
-                <!-- Module ranks — 2nd Year Grade -->
+                <!-- Module ranks — 2nd Year Grade only -->
                 <div class="stats-grid" id="module-ranks-y2nd" style="display:none; margin-top:8px;">
                   <div class="module-ranks-label">Module Ranks</div>
-                  <div class="stat-row"><span class="stat-label"><i class="fas fa-flask"></i> Endocrine, Urinary &amp; Repro</span><span class="stat-val" id="res-rank-eur">#&mdash;</span></div>
-                  <div class="stat-row"><span class="stat-label"><i class="fas fa-utensils"></i> GIT</span><span class="stat-val" id="res-rank-git">#&mdash;</span></div>
-                  <div class="stat-row"><span class="stat-label"><i class="fas fa-brain"></i> CNS</span><span class="stat-val" id="res-rank-cns">#&mdash;</span></div>
-                  <div class="stat-row"><span class="stat-label"><i class="fas fa-layer-group"></i> Concept 1</span><span class="stat-val" id="res-rank-concept1">#&mdash;</span></div>
-                  <div class="stat-row"><span class="stat-label"><i class="fas fa-cubes-stacked"></i> Concept 2</span><span class="stat-val" id="res-rank-concept2">#&mdash;</span></div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-flask"></i> Endocrine, Urinary &amp; Repro</span>
+                    <span class="stat-val" id="res-rank-eur">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-utensils"></i> GIT</span>
+                    <span class="stat-val" id="res-rank-git">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-brain"></i> CNS</span>
+                    <span class="stat-val" id="res-rank-cns">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-layer-group"></i> Concept 1</span>
+                    <span class="stat-val" id="res-rank-concept1">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-cubes-stacked"></i> Concept 2</span>
+                    <span class="stat-val" id="res-rank-concept2">#&mdash;</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -403,36 +759,77 @@
 
           <!-- RIGHT COLUMN WRAPPER -->
           <div style="display:flex; flex-direction:column; gap:22px;">
+            
             <!-- RIGHT: class-wide stats -->
             <div class="card stats-panel" id="stats-panel">
               <div class="stats-card">
                 <div class="stats-section-label"><i class="fas fa-bolt"></i> Key Numbers</div>
                 <div class="key-stats">
-                  <div class="key-stat-box"><div class="key-stat-val" id="stat-max">—</div><div class="key-stat-lbl">Highest<br>Score</div></div>
-                  <div class="key-stat-box"><div class="key-stat-val" id="stat-top100">—</div><div class="key-stat-lbl">Top 100<br>Cutoff</div></div>
-                  <div class="key-stat-box"><div class="key-stat-val" id="stat-top200">—</div><div class="key-stat-lbl">Top 200<br>Cutoff</div></div>
+                  <div class="key-stat-box">
+                    <div class="key-stat-val" id="stat-max">—</div>
+                    <div class="key-stat-lbl">Highest<br>Score</div>
+                  </div>
+                  <div class="key-stat-box">
+                    <div class="key-stat-val" id="stat-top100">—</div>
+                    <div class="key-stat-lbl">Top 100<br>Cutoff</div>
+                  </div>
+                  <div class="key-stat-box">
+                    <div class="key-stat-val" id="stat-top200">—</div>
+                    <div class="key-stat-lbl">Top 200<br>Cutoff</div>
+                  </div>
                 </div>
                 <div class="stats-section-label"><i class="fas fa-chart-bar"></i> Grade Distribution</div>
                 <div class="dist-chart">
-                  <div class="dist-row"><span class="dist-label">Excellent</span><div class="dist-bar-wrap"><div class="dist-bar bar-excellent" id="bar-excellent"></div></div><span class="dist-count" id="cnt-excellent">0</span></div>
-                  <div class="dist-row"><span class="dist-label">Very Good</span><div class="dist-bar-wrap"><div class="dist-bar bar-verygood" id="bar-verygood"></div></div><span class="dist-count" id="cnt-verygood">0</span></div>
-                  <div class="dist-row"><span class="dist-label">Good</span><div class="dist-bar-wrap"><div class="dist-bar bar-good" id="bar-good"></div></div><span class="dist-count" id="cnt-good">0</span></div>
-                  <div class="dist-row"><span class="dist-label">Poor</span><div class="dist-bar-wrap"><div class="dist-bar bar-poor" id="bar-poor"></div></div><span class="dist-count" id="cnt-poor">0</span></div>
-                  <div class="dist-row"><span class="dist-label">Fail</span><div class="dist-bar-wrap"><div class="dist-bar bar-fail" id="bar-fail"></div></div><span class="dist-count" id="cnt-fail">0</span></div>
+                  <div class="dist-row">
+                    <span class="dist-label">Excellent</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-excellent" id="bar-excellent"></div></div>
+                    <span class="dist-count" id="cnt-excellent">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">Very Good</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-verygood" id="bar-verygood"></div></div>
+                    <span class="dist-count" id="cnt-verygood">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">Good</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-good" id="bar-good"></div></div>
+                    <span class="dist-count" id="cnt-good">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">Poor</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-poor" id="bar-poor"></div></div>
+                    <span class="dist-count" id="cnt-poor">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">Fail</span>
+                    <div class="dist-bar-wrap"><div class="dist-bar bar-fail" id="bar-fail"></div></div>
+                    <span class="dist-count" id="cnt-fail">0</span>
+                  </div>
                 </div>
                 <div class="stats-note" id="stats-total-note">Search first to load statistics</div>
               </div>
             </div>
 
-            <!-- Rank Gap Calculator -->
+            <!-- NEW: Rank Gap Calculator -->
             <div class="card">
               <div class="card-top">
-                <div class="section-label"><i class="fas fa-bullseye"></i><span>Target Rank Calculator</span></div>
-                <div class="input-wrap"><i class="fas fa-hashtag"></i><input class="seat-input" id="calc-seat-input" type="text" placeholder="Your Seat Number" /></div>
-                <div class="input-wrap"><i class="fas fa-trophy"></i><input class="seat-input" id="calc-rank-input" type="number" placeholder="Desired Rank (e.g., 50)" /></div>
+                <div class="section-label">
+                  <i class="fas fa-bullseye"></i>
+                  <span>Target Rank Calculator</span>
+                </div>
+                <div class="input-wrap">
+                  <i class="fas fa-hashtag"></i>
+                  <input class="seat-input" id="calc-seat-input" type="text" placeholder="Your Seat Number" />
+                </div>
+                <div class="input-wrap">
+                  <i class="fas fa-trophy"></i>
+                  <input class="seat-input" id="calc-rank-input" type="number" placeholder="Desired Rank (e.g., 50)" />
+                </div>
               </div>
               <div class="card-body-inner">
-                <button class="btn-search" id="calc-btn" onclick="doCalculate()"><i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap</button>
+                <button class="btn-search" id="calc-btn" onclick="doCalculate()">
+                  <i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap
+                </button>
                 <div class="loader" id="calc-loader" style="border-top-color:var(--teal);"></div>
                 <div class="error-msg" id="calc-error-msg"></div>
                 
@@ -451,21 +848,32 @@
                 </div>
               </div>
             </div>
-          </div> 
+
+          </div> <!-- /RIGHT COLUMN WRAPPER -->
+
         </div>
+
         <footer class="site-footer footer-on-photo">&copy; Made by Omar Aboolo &middot; Class of 2030</footer>
       </div>
     </div>
   </div>
-</div>
+
+</div><!-- /app -->
+
 
 <script>
+  /* ════════════════════════════════════
+     API URLS
+  ════════════════════════════════════ */
   const APIS = {
-    y1:    "https://script.google.com/macros/s/AKfycbwKmo9uIfLGyd87NUWzzUVHdoH59y6JZjKoVpnUmKN6BtadeCWf2UF6dIuvBYbfzfBN/exec"
+    y1:    "https://script.google.com/macros/s/AKfycbxAyBtEZN4Do42rH0vZff8G4iOizhwJ0uz8S1XFMgDLqRRVQj8bu09lOyaVfU9v_-v4/exec",
     accum: "https://script.google.com/macros/s/AKfycbxMVfKexhIhxMeRdFsZWAyxkOzP8PKoSB7-V3ABXWp4_aX93odtRbMNXqxUprO9l6yn/exec",
     y2nd:  "https://script.google.com/macros/s/AKfycbzKVrdtxsaYKyMfdzDu3zHBcLtoXWYQBRRIX7ixkeKBWS2-bUgFl_wPYp_Cd2yw6F2L/exec",
   };
 
+  /* ════════════════════════════════════
+     PAGE METADATA
+  ════════════════════════════════════ */
   const MODE_META = {
     y1:    { heading:"1st Year Results",     sub:"CLASS OF 2030 · RANK",          label:"1st Year · Class of 2030",      icon:"fa-medal"         },
     accum: { heading:"Accumulative Results", sub:"2ND YEAR · CLASS OF 2029",      label:"2nd Year · Accumulative Grade", icon:"fa-chart-line"     },
@@ -474,11 +882,41 @@
 
   let currentMode = null;
 
-  function toggleSub(subId, arrowId) {
-    const isOpen = document.getElementById(subId).classList.toggle('open');
-    document.getElementById(arrowId).classList.toggle('open', isOpen);
+  /* ── Ripple tap/click feedback ── */
+  const RIPPLE_SELECTOR = '.nav-btn, .nav-sub-btn, .btn-search, .back-btn, .contact-chip, .key-stat-box';
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    document.addEventListener('pointerdown', (e) => {
+      const target = e.target.closest(RIPPLE_SELECTOR);
+      if (!target || target.disabled) return;
+
+      const rect = target.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 1.6;
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple-el';
+      ripple.style.width = size + 'px';
+      ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+
+      target.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    });
   }
 
+  /* ── Toggle expandable sub-list ── */
+  function toggleSub(subId, arrowId) {
+    const sub   = document.getElementById(subId);
+    const arrow = document.getElementById(arrowId);
+    const isOpen = sub.classList.toggle('open');
+    arrow.classList.toggle('open', isOpen);
+  }
+
+  /* ── Navigate to results page ── */
   function goToResults(mode) {
     currentMode = mode;
     const m = MODE_META[mode];
@@ -490,122 +928,175 @@
 
     resetResult();
     document.getElementById('seat-input').value = '';
+    
+    // Clear calculator
     document.getElementById('calc-seat-input').value = '';
     document.getElementById('calc-rank-input').value = '';
     document.getElementById('calc-result-area').style.display = 'none';
     document.getElementById('calc-error-msg').style.display = 'none';
 
+    // Fetch stats for this section (cached after first load)
     fetchStats(mode);
+
+    // Scroll results page back to top before showing
     document.getElementById('page-results').scrollTop = 0;
+
     document.getElementById('page-landing').classList.add('hidden');
     document.getElementById('page-results').classList.add('visible');
+
     setTimeout(() => document.getElementById('seat-input').focus(), 600);
   }
 
+  /* ── Back to landing ── */
   function goBack() {
     document.getElementById('page-landing').classList.remove('hidden');
     document.getElementById('page-results').classList.remove('visible');
+    // Scroll landing back to top
     document.getElementById('page-landing').scrollTop = 0;
   }
 
+  /* ── Reset result UI ── */
   function resetResult() {
     document.getElementById('result-area').style.display = 'none';
     document.getElementById('error-msg').style.display   = 'none';
   }
 
+  /* ── Grade calc from percentage (IFS formula) ── */
   function calcGrade(percentStr) {
-    if (!percentStr || percentStr === '—' || percentStr === '-') return { label:'N/A', cls:'bg-Default' };
+    if (!percentStr || percentStr === '—' || percentStr === '-')
+      return { label:'N/A', cls:'bg-Default' };
     const pct = parseFloat(percentStr.toString().replace('%','').trim());
     if (isNaN(pct)) return { label:'N/A', cls:'bg-Default' };
     if (pct >= 85) return { label:'Excellent', cls:'bg-Excellent' };
-    if (pct >= 75) return { label:'Very Good', cls:'bg-VeryGood'  };
-    if (pct >= 65) return { label:'Good',      cls:'bg-Good'      };
-    if (pct >= 60) return { label:'Poor',      cls:'bg-Poor'      };
-    return { label:'Fail', cls:'bg-Fail' };
+    if (pct >= 75) return { label:'Very Good',  cls:'bg-VeryGood'  };
+    if (pct >= 65) return { label:'Good',       cls:'bg-Good'      };
+    if (pct >= 60) return { label:'Poor',       cls:'bg-Poor'      };
+    return            { label:'Fail',       cls:'bg-Fail'      };
   }
 
+  /* ── Search ── */
   function doSearch() {
     const seat = (document.getElementById('seat-input').value || '').trim();
     if (!seat) { document.getElementById('seat-input').focus(); return; }
 
     const url = APIS[currentMode];
-    if (!url || url.includes('YOUR_')) { alert('Please add the API URL for this section.'); return; }
+    if (!url || url.includes('YOUR_')) {
+      alert('Please add the API URL for this section.');
+      return;
+    }
 
     const btn = document.getElementById('search-btn');
-    btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="margin-right:8px;"></i>Searching...';
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="margin-right:8px;"></i>Searching...';
     document.getElementById('loader').style.display = 'block';
     resetResult();
 
     fetch(url + '?seat=' + encodeURIComponent(seat))
       .then(r => r.json())
       .then(data => {
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-search" style="margin-right:8px;"></i>Search Results';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-search" style="margin-right:8px;"></i>Search Results';
         document.getElementById('loader').style.display = 'none';
 
-        if (data.found) populateResult(data);
-        else {
+        if (data.found) {
+          populateResult(data);
+        } else {
           document.getElementById('error-msg').style.display = 'block';
-          if (data.stats) { cachedStats[currentMode] = data.stats; renderStats(data.stats); }
+          if (data.stats) {
+            cachedStats[currentMode] = data.stats;
+            renderStats(data.stats);
+          }
           const card = document.querySelector('.results-grid .card');
-          card.style.animation = 'none'; requestAnimationFrame(() => { card.style.animation = 'shake 0.5s'; });
+          card.style.animation = 'none';
+          requestAnimationFrame(() => { card.style.animation = 'shake 0.5s'; });
         }
       })
       .catch(err => {
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-search" style="margin-right:8px;"></i>Search Results';
+        console.error(err);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-search" style="margin-right:8px;"></i>Search Results';
         document.getElementById('loader').style.display = 'none';
         alert('Connection failed. Please check the API URL.');
       });
   }
 
+  /* ── Populate result ── */
   function populateResult(data) {
-    const isFail = data.totalGrade === 'Fail' || data.totalPercent === '-' ||
-                   (data.totalRatings && (data.totalRatings.includes('راسب') || data.totalRatings === 'Fail' || data.totalRatings === 'F' || data.totalRatings === 'Absent' || data.totalRatings === 'ايقاف قيد' || data.totalRatings === 'حرمان بعذر' || data.totalRatings === 'W'));
+    // Adding fallbacks here so the front-end never breaks regardless of whether 
+    // the old API or the new API with updated JSON keys is connected.
+    const totalStr   = data.totalGrade || data.total || '—';
+    const percentStr = data.totalPercent || data.percent || '—';
+    const rankStr    = data.totalRank || data.rank || '—';
+    const ratingsStr = data.totalRatings || data.evaluation || '';
+
+    const isFail = totalStr === 'Fail' || percentStr === '-' ||
+                   (ratingsStr && (ratingsStr.includes('راسب') || ratingsStr === 'Fail' || ratingsStr === 'F' || ratingsStr === 'Absent' || ratingsStr === 'ايقاف قيد' || ratingsStr === 'حرمان بعذر' || ratingsStr === 'W'));
     
-    const grade = isFail ? { label:'Fail/Abs', cls:'bg-Fail' } : calcGrade(data.totalPercent);
+    const grade = isFail ? { label:'Fail/Abs', cls:'bg-Fail' } : calcGrade(percentStr);
 
     document.getElementById('res-name').innerText    = data.name   || '—';
     document.getElementById('res-seat').innerText    = 'Seat: ' + (data.seat || '—');
-    document.getElementById('res-rank').innerText    = '#' + (data.totalRank || '—');
-    document.getElementById('res-total').innerText   = data.totalGrade  || '—';
-    document.getElementById('res-percent').innerText = data.totalPercent || '—';
+    document.getElementById('res-rank').innerText    = '#' + rankStr;
+    document.getElementById('res-total').innerText   = totalStr;
+    document.getElementById('res-percent').innerText = percentStr;
     document.getElementById('grade-label').innerText = grade.label;
 
     const circle = document.getElementById('grade-circle');
     circle.className = 'grade-circle ' + grade.cls;
     circle.innerText = grade.label;
 
-    const y1Box = document.getElementById('module-ranks-y1');
+    /* ── Module ranks (per-mode) ── */
+    const y1Box   = document.getElementById('module-ranks-y1');
     const y2ndBox = document.getElementById('module-ranks-y2nd');
-    y1Box.style.display = 'none'; y2ndBox.style.display = 'none';
+    y1Box.style.display   = 'none';
+    y2ndBox.style.display = 'none';
 
     if (currentMode === 'y1') {
-      // Maps to the exact values produced by the new JSON
-      document.getElementById('res-rank-foundation').innerText = `#${data.foundationRank || '—'}  (${data.foundationGrade || '—'} pts)`;
-      document.getElementById('res-rank-blood').innerText      = `#${data.bloodAndImmuneRank || '—'}  (${data.bloodAndImmuneGrade || '—'} pts)`;
+      const fRank = data.foundationRank || data.rankFoundation || '—';
+      const fGrade = data.foundationGrade ? `  (${data.foundationGrade} pts)` : '';
+      
+      const bRank = data.bloodAndImmuneRank || data.rankBlood || '—';
+      const bGrade = data.bloodAndImmuneGrade ? `  (${data.bloodAndImmuneGrade} pts)` : '';
+
+      document.getElementById('res-rank-foundation').innerText = '#' + fRank + fGrade;
+      document.getElementById('res-rank-blood').innerText      = '#' + bRank + bGrade;
       y1Box.style.display = 'flex';
     } else if (currentMode === 'y2nd') {
-      document.getElementById('res-rank-eur').innerText      = '#' + (data.rankEUR || '—');
-      document.getElementById('res-rank-git').innerText      = '#' + (data.rankGIT || '—');
-      document.getElementById('res-rank-cns').innerText      = '#' + (data.rankCNS || '—');
+      document.getElementById('res-rank-eur').innerText      = '#' + (data.rankEUR      || '—');
+      document.getElementById('res-rank-git').innerText      = '#' + (data.rankGIT      || '—');
+      document.getElementById('res-rank-cns').innerText      = '#' + (data.rankCNS      || '—');
       document.getElementById('res-rank-concept1').innerText = '#' + (data.rankConcept1 || '—');
       document.getElementById('res-rank-concept2').innerText = '#' + (data.rankConcept2 || '—');
       y2ndBox.style.display = 'flex';
     }
 
     document.getElementById('result-area').style.display = 'block';
-    if (data.stats) { cachedStats[currentMode] = data.stats; renderStats(data.stats); }
+    if (data.stats) {
+      cachedStats[currentMode] = data.stats;
+      renderStats(data.stats);
+    }
   }
 
+  /* ── Stats panel ── */
   let cachedStats = {};
 
   function showStatsLoading() {
-    ['stat-max','stat-top100','stat-top200'].forEach(id => { document.getElementById(id).innerText = '···'; document.getElementById(id).classList.add('shimmer'); });
-    ['excellent','verygood','good','poor','fail'].forEach(k => { document.getElementById('bar-' + k).style.width = '0%'; document.getElementById('cnt-' + k).innerText = '—'; });
+    ['stat-max','stat-top100','stat-top200'].forEach(id => {
+      const el = document.getElementById(id);
+      el.innerText = '···';
+      el.classList.add('shimmer');
+    });
+    ['excellent','verygood','good','poor','fail'].forEach(k => {
+      document.getElementById('bar-' + k).style.width = '0%';
+      document.getElementById('cnt-' + k).innerText = '—';
+    });
     document.getElementById('stats-total-note').innerText = 'Loading statistics...';
   }
 
   function renderStats(s) {
-    ['stat-max','stat-top100','stat-top200'].forEach(id => document.getElementById(id).classList.remove('shimmer'));
+    ['stat-max','stat-top100','stat-top200'].forEach(id => {
+      document.getElementById(id).classList.remove('shimmer');
+    });
     document.getElementById('stat-max').innerText    = s.maxGrade  || '—';
     document.getElementById('stat-top100').innerText = s.top100cut || '—';
     document.getElementById('stat-top200').innerText = s.top200cut || '—';
@@ -613,30 +1104,55 @@
 
     const d = s.dist;
     const maxVal = Math.max(d.Excellent, d.VeryGood, d.Good, d.Poor, d.Fail, 1);
-    [{id:'excellent',val:d.Excellent},{id:'verygood',val:d.VeryGood},{id:'good',val:d.Good},{id:'poor',val:d.Poor},{id:'fail',val:d.Fail}]
-      .forEach(b => {
-        document.getElementById('cnt-' + b.id).innerText = b.val;
-        setTimeout(() => document.getElementById('bar-' + b.id).style.width = ((b.val / maxVal) * 100) + '%', 60);
-      });
+    const bars = [
+      { id:'excellent', val:d.Excellent },
+      { id:'verygood',  val:d.VeryGood  },
+      { id:'good',      val:d.Good      },
+      { id:'poor',      val:d.Poor      },
+      { id:'fail',      val:d.Fail      },
+    ];
+    bars.forEach(b => {
+      document.getElementById('cnt-' + b.id).innerText = b.val;
+      setTimeout(() => {
+        document.getElementById('bar-' + b.id).style.width = ((b.val / maxVal) * 100) + '%';
+      }, 60);
+    });
   }
 
   function fetchStats(mode) {
-    if (cachedStats[mode]) renderStats(cachedStats[mode]);
-    else {
+    if (cachedStats[mode]) {
+      renderStats(cachedStats[mode]);
+    } else {
       showStatsLoading();
+      document.getElementById('stats-total-note').innerText = 'Loading statistics...';
+
       const url = APIS[mode];
       if (url && !url.includes('YOUR_')) {
         fetch(url + '?seat=')
           .then(r => r.json())
           .then(data => {
-            if (data.stats) { cachedStats[mode] = data.stats; renderStats(data.stats); }
-            else document.getElementById('stats-total-note').innerText = 'No statistics found.';
+            if (data.stats) {
+              cachedStats[mode] = data.stats;
+              renderStats(data.stats);
+            } else {
+              document.getElementById('stats-total-note').innerText = 'No statistics found.';
+            }
           })
-          .catch(() => document.getElementById('stats-total-note').innerText = 'Failed to load stats.');
-      } else document.getElementById('stats-total-note').innerText = 'API URL not configured.';
+          .catch(err => {
+            console.error(err);
+            document.getElementById('stats-total-note').innerText = 'Failed to load stats.';
+          });
+      } else {
+         document.getElementById('stats-total-note').innerText = 'API URL not configured.';
+      }
     }
   }
 
+  document.getElementById('seat-input').addEventListener('keypress', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  /* ── Target Rank Calculator ── */
   function doCalculate() {
     const seat = (document.getElementById('calc-seat-input').value || '').trim();
     const targetRank = (document.getElementById('calc-rank-input').value || '').trim();
@@ -645,25 +1161,36 @@
     const resBox = document.getElementById('calc-result-area');
     const loader = document.getElementById('calc-loader');
     
-    errBox.style.display = 'none'; resBox.style.display = 'none';
+    errBox.style.display = 'none';
+    resBox.style.display = 'none';
 
-    if (!seat || !targetRank) { errBox.innerText = "Please enter both Seat Number and Target Rank."; errBox.style.display = 'block'; return; }
+    if (!seat || !targetRank) {
+      errBox.innerText = "Please enter both Seat Number and Target Rank.";
+      errBox.style.display = 'block';
+      return;
+    }
 
     const url = APIS[currentMode];
-    if (!url) { alert('Please configure API URL first.'); return; }
+    if (!url) {
+      alert('Please configure API URL first.');
+      return;
+    }
 
-    btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="margin-right:8px;"></i>Calculating...';
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="margin-right:8px;"></i>Calculating...';
     loader.style.display = 'block';
 
     fetch(url + '?seat=' + encodeURIComponent(seat) + '&targetRank=' + encodeURIComponent(targetRank))
       .then(r => r.json())
       .then(data => {
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap';
         loader.style.display = 'none';
 
         if (data.found) {
           let targetDisplay = data.targetScore;
           if (data.targetPercent) targetDisplay += ` (${data.targetPercent})`;
+          
           document.getElementById('calc-target-score').innerText = targetDisplay;
           
           if (data.pointsNeeded > 0) {
@@ -680,22 +1207,28 @@
         }
       })
       .catch(err => {
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap';
+        console.error(err);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-calculator" style="margin-right:8px;"></i>Calculate Gap';
         loader.style.display = 'none';
-        errBox.innerText = 'Connection failed.'; errBox.style.display = 'block';
+        errBox.innerText = 'Connection failed.';
+        errBox.style.display = 'block';
       });
   }
 
-  document.getElementById('search-btn').addEventListener('click', () => {
+  document.getElementById('search-btn').addEventListener('click', function() {
       const mainSeat = document.getElementById('seat-input').value;
       if(mainSeat) document.getElementById('calc-seat-input').value = mainSeat;
   });
 
-  ['seat-input','calc-seat-input','calc-rank-input'].forEach(id => {
-    document.getElementById(id).addEventListener('keypress', e => {
-      if (e.key === 'Enter') id === 'seat-input' ? doSearch() : doCalculate();
-    });
+  document.getElementById('calc-seat-input').addEventListener('keypress', e => {
+    if (e.key === 'Enter') doCalculate();
   });
+  document.getElementById('calc-rank-input').addEventListener('keypress', e => {
+    if (e.key === 'Enter') doCalculate();
+  });
+
 </script>
+
 </body>
 </html>
