@@ -761,6 +761,19 @@
                     <span class="stat-val" id="res-rank-concept2">#&mdash;</span>
                   </div>
                 </div>
+
+                <!-- Year breakdown — Accumulative only -->
+                <div class="stats-grid" id="year-breakdown-accum" style="display:none; margin-top:8px;">
+                  <div class="module-ranks-label">Year Breakdown</div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-1"></i> First Year Total</span>
+                    <span class="stat-val" id="res-first-year-total">&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-2"></i> Second Year Total</span>
+                    <span class="stat-val" id="res-second-year-total">&mdash;</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1046,10 +1059,12 @@
     circle.innerText = grade.label;
 
     /* ── Module ranks (per-mode) ── */
-    const y1Box   = document.getElementById('module-ranks-y1');
-    const y2ndBox = document.getElementById('module-ranks-y2nd');
-    y1Box.style.display   = 'none';
-    y2ndBox.style.display = 'none';
+    const y1Box     = document.getElementById('module-ranks-y1');
+    const y2ndBox   = document.getElementById('module-ranks-y2nd');
+    const accumBox  = document.getElementById('year-breakdown-accum');
+    y1Box.style.display    = 'none';
+    y2ndBox.style.display  = 'none';
+    accumBox.style.display = 'none';
 
     if (currentMode === 'y1') {
       document.getElementById('res-rank-foundation').innerText = '#' + (data.rankFoundation || '—');
@@ -1064,6 +1079,10 @@
       document.getElementById('res-rank-concept1').innerText = '#' + (data.rankConcept1 || '—');
       document.getElementById('res-rank-concept2').innerText = '#' + (data.rankConcept2 || '—');
       y2ndBox.style.display = 'flex';
+    } else if (currentMode === 'accum') {
+      document.getElementById('res-first-year-total').innerText  = data.firstYearTotal  || '—';
+      document.getElementById('res-second-year-total').innerText = data.secondYearTotal || '—';
+      accumBox.style.display = 'flex';
     }
 
     document.getElementById('result-area').style.display = 'block';
