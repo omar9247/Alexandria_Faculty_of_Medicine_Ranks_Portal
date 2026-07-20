@@ -703,7 +703,7 @@
                 </div>
                 <div class="stats-grid">
                   <div class="stat-row">
-                    <span class="stat-label"><i class="fas fa-trophy"></i> Total Rank</span>
+                    <span class="stat-label"><i class="fas fa-trophy"></i> Class Rank</span>
                     <span class="stat-val" id="res-rank">#&mdash;</span>
                   </div>
                   <div class="stat-row">
@@ -718,7 +718,7 @@
 
                 <!-- Module ranks — 1st Year only -->
                 <div class="stats-grid" id="module-ranks-y1" style="display:none; margin-top:8px;">
-                  <div class="module-ranks-label">Module Ranks &amp; Grades</div>
+                  <div class="module-ranks-label">Module Ranks</div>
                   <div class="stat-row">
                     <span class="stat-label"><i class="fas fa-seedling"></i> Foundation</span>
                     <span class="stat-val" id="res-rank-foundation">#&mdash;</span>
@@ -726,6 +726,14 @@
                   <div class="stat-row">
                     <span class="stat-label"><i class="fas fa-droplet"></i> Blood &amp; Immune</span>
                     <span class="stat-val" id="res-rank-blood">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-bone"></i> Musculoskeletal</span>
+                    <span class="stat-val" id="res-rank-msk">#&mdash;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label"><i class="fas fa-lungs"></i> Cardiopulmonary</span>
+                    <span class="stat-val" id="res-rank-cardio">#&mdash;</span>
                   </div>
                 </div>
 
@@ -1022,23 +1030,15 @@
 
   /* ── Populate result ── */
   function populateResult(data) {
-    // Adding fallbacks here so the front-end never breaks regardless of whether 
-    // the old API or the new API with updated JSON keys is connected.
-    const totalStr   = data.totalGrade || data.total || '—';
-    const percentStr = data.totalPercent || data.percent || '—';
-    const rankStr    = data.totalRank || data.rank || '—';
-    const ratingsStr = data.totalRatings || data.evaluation || '';
-
-    const isFail = totalStr === 'Fail' || percentStr === '-' ||
-                   (ratingsStr && (ratingsStr.includes('راسب') || ratingsStr === 'Fail' || ratingsStr === 'F' || ratingsStr === 'Absent' || ratingsStr === 'ايقاف قيد' || ratingsStr === 'حرمان بعذر' || ratingsStr === 'W'));
-    
-    const grade = isFail ? { label:'Fail/Abs', cls:'bg-Fail' } : calcGrade(percentStr);
+    const isFail = data.total === 'Fail' || data.percent === '-' ||
+                   (data.evaluation && (data.evaluation.includes('راسب') || data.evaluation === 'Fail'));
+    const grade = isFail ? { label:'Fail', cls:'bg-Fail' } : calcGrade(data.percent);
 
     document.getElementById('res-name').innerText    = data.name   || '—';
     document.getElementById('res-seat').innerText    = 'Seat: ' + (data.seat || '—');
-    document.getElementById('res-rank').innerText    = '#' + rankStr;
-    document.getElementById('res-total').innerText   = totalStr;
-    document.getElementById('res-percent').innerText = percentStr;
+    document.getElementById('res-rank').innerText    = '#' + (data.rank || '—');
+    document.getElementById('res-total').innerText   = data.total  || '—';
+    document.getElementById('res-percent').innerText = data.percent || '—';
     document.getElementById('grade-label').innerText = grade.label;
 
     const circle = document.getElementById('grade-circle');
@@ -1052,14 +1052,10 @@
     y2ndBox.style.display = 'none';
 
     if (currentMode === 'y1') {
-      const fRank = data.foundationRank || data.rankFoundation || '—';
-      const fGrade = data.foundationGrade ? `  (${data.foundationGrade} pts)` : '';
-      
-      const bRank = data.bloodAndImmuneRank || data.rankBlood || '—';
-      const bGrade = data.bloodAndImmuneGrade ? `  (${data.bloodAndImmuneGrade} pts)` : '';
-
-      document.getElementById('res-rank-foundation').innerText = '#' + fRank + fGrade;
-      document.getElementById('res-rank-blood').innerText      = '#' + bRank + bGrade;
+      document.getElementById('res-rank-foundation').innerText = '#' + (data.rankFoundation || '—');
+      document.getElementById('res-rank-blood').innerText      = '#' + (data.rankBlood      || '—');
+      document.getElementById('res-rank-msk').innerText        = '#' + (data.rankMSK         || '—');
+      document.getElementById('res-rank-cardio').innerText     = '#' + (data.rankCardio      || '—');
       y1Box.style.display = 'flex';
     } else if (currentMode === 'y2nd') {
       document.getElementById('res-rank-eur').innerText      = '#' + (data.rankEUR      || '—');
