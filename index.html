@@ -988,10 +988,10 @@
       return { label:'N/A', cls:'bg-Default' };
     const pct = parseFloat(percentStr.toString().replace('%','').trim());
     if (isNaN(pct)) return { label:'N/A', cls:'bg-Default' };
-    if (pct >= 85) return { label:'Excellent', cls:'bg-Excellent' };
-    if (pct >= 75) return { label:'Very Good',  cls:'bg-VeryGood'  };
-    if (pct >= 65) return { label:'Good',       cls:'bg-Good'      };
-    if (pct >= 60) return { label:'Poor',       cls:'bg-Poor'      };
+    if (pct >= 0.85) return { label:'Excellent', cls:'bg-Excellent' };
+    if (pct >= 0.75) return { label:'Very Good',  cls:'bg-VeryGood'  };
+    if (pct >= 0.65) return { label:'Good',       cls:'bg-Good'      };
+    if (pct >= 0.60) return { label:'Poor',       cls:'bg-Poor'      };
     return            { label:'Fail',       cls:'bg-Fail'      };
   }
 
